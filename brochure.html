@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HICH HOUSE — Brochure</title>
+<link rel="icon" href="assets/hich-logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&amp;family=Cormorant+Garamond:ital,wght@0,400..600;1,400..500&amp;family=EB+Garamond:ital,wght@0,400..600;1,400..500&amp;family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Playfair+Display:ital,wght@0,400..700;1,400..600&amp;family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&amp;family=Spectral:ital,wght@0,300..600;1,300..500&amp;family=Outfit:wght@200..600&amp;family=Jost:wght@300..600&amp;family=Inter:wght@300..600&amp;family=Archivo:ital,wght@0,400..700;1,400..700&amp;family=Cinzel:wght@400..600&amp;family=Marcellus&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E6D7; --panel:#F1EFE3; --panel2:#F6F4EA; --ink:#33402F; --accent:#C2683C;
+    --muted:#7e8472; --ph:#cbc8b6; --filter:none;
+    --disp:'Fraunces',serif; --body-font:'EB Garamond',serif; --dispw:300; --htrack:0; --hcase:none;
+    --sans:'Jost',sans-serif;
+    --soft:color-mix(in srgb, var(--ink) 74%, var(--bg));
+    --line:color-mix(in srgb, var(--ink) 18%, transparent);
+    --muted-strong:color-mix(in srgb, var(--ink) 52%, var(--muted));
+    --accent-ink:color-mix(in srgb, var(--accent) 33%, var(--ink));
+    --hl:#C2683C;
+    --hl-ink:color-mix(in srgb, var(--hl) 72%, var(--ink));
+    /* size scale — overridden for mobile */
+    --sheet-w:297mm; --sheet-h:210mm; --pad:14mm;
+    --t-title:34pt; --t-sub:16pt; --t-body:11.5pt; --t-small:8pt; --t-name:21pt;
+  }
+  html[data-size="mobile"]{
+    --sheet-w:110mm; --sheet-h:220mm; --pad:9mm;
+    --t-title:24pt; --t-sub:13pt; --t-body:10.5pt; --t-small:7.2pt; --t-name:15pt;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#b9b4a6;font-family:var(--body-font);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+
+  .toolbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;
+    background:color-mix(in srgb, var(--ink) 90%, #000);color:var(--bg);border-radius:30px;padding:7px 8px;box-shadow:0 12px 34px rgba(20,24,16,.35);max-width:calc(100vw - 24px)}
+  .toolbar button{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border:none;
+    background:none;color:var(--bg);border-radius:22px;padding:10px 16px;white-space:nowrap;transition:background .2s,color .2s,opacity .2s}
+  .tb-back{opacity:.65}
+  .tb-back:hover{opacity:1}
+  .tb-seg{display:flex;background:color-mix(in srgb, var(--bg) 16%, transparent);border-radius:22px;padding:3px}
+  .tb-seg .seg{padding:8px 15px;opacity:.7;border-radius:20px}
+  .tb-seg .seg.active{background:var(--bg);color:var(--ink);opacity:1}
+  .tb-act{display:flex;gap:6px}
+  .tb-act[hidden]{display:none}
+  .act-print,.act-dl{background:var(--bg);color:var(--ink)}
+  .act-print:hover,.act-dl:hover{background:color-mix(in srgb, var(--bg) 84%, var(--ink))}
+  .act-share,.act-2nd{background:none;border:1px solid color-mix(in srgb, var(--bg) 42%, transparent);color:var(--bg)}
+  .act-share:hover,.act-2nd:hover{background:color-mix(in srgb, var(--bg) 16%, transparent)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);
+    font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:12px 20px;border-radius:24px;
+    box-shadow:0 12px 34px rgba(20,24,16,.4);opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .toast.show{opacity:1}
+
+  /* preview fit via transform:scale — robust on iOS Safari (body{zoom} is not) */
+  .sheet-fit{margin:10mm auto;overflow:hidden;width:calc(var(--sheet-w) * var(--bscale,1));height:calc(var(--sheet-h) * var(--bscale,1))}
+  .sheet{width:var(--sheet-w);height:var(--sheet-h);margin:0;transform:scale(var(--bscale,1));transform-origin:top left;background:var(--bg);color:var(--ink);
+    box-shadow:0 14px 44px rgba(28,24,19,.3);position:relative;overflow:hidden;
+    display:flex;flex-direction:column;padding:var(--pad);
+    print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .sheet.no-pad{padding:0}
+
+  .ph{background-color:var(--ph);background-size:cover;background-position:center;print-color-adjust:exact;-webkit-print-color-adjust:exact;position:relative}
+  .ph[data-cap]::after{content:attr(data-cap);position:absolute;left:0;bottom:0;font-family:var(--sans);font-size:var(--t-small);
+    letter-spacing:.24em;text-transform:uppercase;color:#fff;padding:4mm;text-shadow:0 1px 6px rgba(20,24,18,.55)}
+
+  .eyebrow{font-family:var(--sans);font-size:var(--t-small);letter-spacing:.4em;text-transform:uppercase;color:var(--muted-strong)}
+  .eyebrow.acc{color:var(--hl, var(--accent))}
+  .folio{display:flex;justify-content:space-between;gap:6mm;font-family:var(--sans);font-size:var(--t-small);letter-spacing:.28em;text-transform:uppercase;color:var(--muted-strong)}
+  .folio span{white-space:nowrap}
+  h2{font-family:var(--disp);font-weight:var(--dispw);font-size:var(--t-title);line-height:1.04;letter-spacing:var(--htrack);text-transform:var(--hcase);text-wrap:balance}
+  h2 em,h3 em{font-style:italic;color:var(--hl, var(--accent))}
+  h3{font-family:var(--disp);font-weight:var(--dispw);font-size:var(--t-sub);line-height:1.1;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+  p{font-size:var(--t-body);color:var(--soft);max-width:58ch;line-height:1.6}
+  p.lede{font-size:calc(var(--t-body) * 1.25);color:var(--ink)}
+  .rule{height:1px;background:var(--line)}
+
+  .wordmark{display:inline-block;background:var(--ink);aspect-ratio:528/334;
+    -webkit-mask:url("assets/hich-logo.svg") no-repeat center/contain;mask:url("assets/hich-logo.svg") no-repeat center/contain}
+
+  /* ---------- cover ---------- */
+  .cover .ph.full{position:absolute;inset:0}
+  .cover .scrim{position:absolute;inset:0;background:linear-gradient(rgba(24,26,20,.46),rgba(24,26,20,.52));print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .cover .frame{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;justify-content:space-between;color:#F2EFE4;z-index:2}
+  .cover .folio{color:rgba(242,239,228,.92)}
+  .cover .center{text-align:center;margin:auto 0}
+  .cover .logo{height:30mm;width:auto;background:#F2EFE4}
+  html[data-size="mobile"] .cover .logo{height:24mm;width:auto}
+  html[data-size="mobile"] .cover .folio{flex-direction:column;gap:1.5mm;align-items:center;text-align:center;letter-spacing:.2em}
+  .cover .tag{font-family:var(--sans);font-size:calc(var(--t-small) * 1.15);letter-spacing:.5em;text-transform:uppercase;margin-top:4mm}
+  .cover .line{font-family:var(--disp);font-style:italic;font-size:var(--t-sub);margin-top:7mm}
+
+  /* ---------- generic two-col spread (desktop) / stack (mobile) ---------- */
+  .cols{display:grid;grid-template-columns:1.05fr .95fr;gap:10mm;flex:1;min-height:0;margin-top:6mm}
+  html[data-size="mobile"] .cols{grid-template-columns:1fr;gap:6mm}
+  .cols .copy{display:flex;flex-direction:column;gap:4mm;min-height:0}
+  .cols .img{min-height:0}
+  .facts{margin-top:auto;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;padding-top:4mm}
+  html[data-size="mobile"] .facts{grid-template-columns:1fr 1fr}
+  .facts b{display:block;font-family:var(--sans);font-weight:400;font-size:var(--t-small);letter-spacing:.26em;text-transform:uppercase;color:var(--muted-strong);margin-bottom:3mm}
+  .facts span{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-body) * 1.3);line-height:1.08;display:block}
+  /* Bottega (the client's mood): pull the olive highlight clearly apart from a deep, near-neutral
+     headline — and drop Cinzel's faux-italic so the accent reads as colour, not a slant. */
+  body[data-mood="07"] .sheet:not(.back) h2, body[data-mood="07"] .sheet:not(.back) h3,
+  body[data-mood="07"] #pdfDoc .pdf-card h2, body[data-mood="07"] #pdfDoc .pdf-card h3{color:#322d24}
+  body[data-mood="07"] .sheet:not(.back) h2 em, body[data-mood="07"] .sheet:not(.back) h3 em,
+  body[data-mood="07"] #pdfDoc .pdf-card h2 em, body[data-mood="07"] #pdfDoc .pdf-card h3 em{color:#76823b;font-style:normal}
+  /* back cover is dark — keep its headline on the paper colour for legibility (any mood) */
+  .sheet.back h3{color:var(--bg)}
+
+  /* ---------- enriched image stack: a lead image + a strip of supporting frames ---------- */
+  /* fully fluid inside the fixed A4 column — flex shares the column height, so it can never
+     overflow the sheet regardless of how the copy beside it wraps. */
+  .cols .istack{min-height:0}
+  .istack{display:flex;flex-direction:column;gap:5mm;height:100%;min-height:0}
+  .istack>.ph{flex:1 1 0;min-height:0}
+  .istack>.ph.lead{flex:2.05 1 0}
+  .istack>.row{display:flex;gap:5mm;flex:1 1 0;min-height:0}
+  .istack>.row>.ph{flex:1 1 0;min-width:0;min-height:0}
+
+  /* ---------- exposé galleries: image-led spreads, one area per sheet ---------- */
+  .ghead{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm;margin-top:1mm}
+  .ghead .gh-l{min-width:0}
+  .ghead h2{margin-top:2mm}
+  .ghead p{margin:0 0 1mm;max-width:46ch;text-align:right;font-size:calc(var(--t-body)*.95)}
+  .gal{flex:1;min-height:0;display:grid;gap:5mm;margin-top:5mm}
+  .gal .ph{min-width:0;min-height:0;background-color:var(--ph)}
+  .gal .ph[data-cap]::after{left:0;right:0;padding:10mm 3.5mm 3mm;letter-spacing:.18em;
+    background:linear-gradient(transparent,rgba(20,24,16,.55))}
+  .gal .a{grid-area:a}.gal .b{grid-area:b}.gal .c{grid-area:c}.gal .d{grid-area:d}.gal .e{grid-area:e}
+  /* varied editorial layouts — rhythm across spreads, big features that let an image breathe */
+  .l-grid{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr)}
+  .l-grid6{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr)}
+  .l-feature{grid-template-columns:repeat(4,1fr);grid-template-rows:1fr 1fr;
+    grid-template-areas:"a a b c" "a a d e"}
+  .l-tall{grid-template-columns:1.55fr 1fr;grid-template-rows:1fr 1fr;
+    grid-template-areas:"a b" "a c"}
+  .l-quad{grid-template-columns:1.5fr 1fr;grid-template-rows:repeat(3,1fr);
+    grid-template-areas:"a b" "a c" "a d"}
+  .l-bigtop{grid-template-columns:repeat(6,1fr);grid-template-rows:1.22fr 1fr;
+    grid-template-areas:"a a a b b b" "c c d d e e"}
+  .l-widetop{grid-template-columns:repeat(3,1fr);grid-template-rows:1.18fr 1fr;
+    grid-template-areas:"a a a" "b c d"}
+  .l-duo{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
+  /* crop control — pull the subject into frame instead of dead-centre */
+  .gal .ph.pos-b{background-position:center 78%}
+  .gal .ph.pos-t{background-position:center 14%}
+  .gal .ph.pos-l{background-position:18% center}
+  .gal .ph.pos-r{background-position:82% center}
+  .istack .ph.pos-b{background-position:center 82%}
+
+  /* ---------- rooms ---------- */
+  .rooms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6mm;flex:1;min-height:0;margin-top:6mm}
+  html[data-size="mobile"] .rooms-grid{grid-template-columns:1fr;gap:4mm}
+  .roomcard{border-top:1px solid var(--line);padding-top:3mm;display:flex;flex-direction:column;gap:2.5mm}
+  .roomcard .rn{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-sub) * 1.25);color:var(--accent);opacity:.55;line-height:.9}
+  .roomcard .ph{aspect-ratio:4/3}
+  html[data-size="mobile"] .roomcard{display:grid;grid-template-columns:auto 1fr 34mm;gap:4mm;align-items:start}
+  html[data-size="mobile"] .roomcard .ph{aspect-ratio:4/3;width:34mm}
+  .roomcard p{font-size:calc(var(--t-body) * .94);line-height:1.5}
+
+  /* ---------- around / map ---------- */
+  .dist{list-style:none;border-top:1px solid var(--line)}
+  .dist li{display:flex;justify-content:space-between;gap:6mm;align-items:baseline;padding:2.4mm 0;border-bottom:1px solid var(--line)}
+  .dist li b{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-body) * 1.25)}
+  .dist li span{font-family:var(--sans);font-size:var(--t-small);letter-spacing:.2em;text-transform:uppercase;color:var(--muted-strong);white-space:nowrap}
+  .coords{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-title) * .9);text-align:center;line-height:1.05;margin-top:auto}
+  .coords em{font-style:italic;color:var(--hl, var(--accent))}
+  .coord-sub{text-align:center;font-family:var(--sans);font-size:var(--t-small);letter-spacing:.36em;text-transform:uppercase;color:var(--muted-strong);margin-top:2.5mm}
+
+  /* ---------- back cover ---------- */
+  .back{background:var(--ink);color:var(--bg);align-items:center;justify-content:center;text-align:center;display:flex}
+  .back .inner{display:flex;flex-direction:column;align-items:center;gap:6mm}
+  .back .logo{height:22mm;width:auto;background:var(--bg)}
+  .back .mail{font-family:var(--sans);font-size:calc(var(--t-small) * 1.3);letter-spacing:.26em;text-transform:uppercase;color:inherit;text-decoration:none;
+    border:1px solid color-mix(in srgb, var(--bg) 40%, transparent);border-radius:28px;padding:4mm 8mm}
+  .back .meta{font-family:var(--sans);font-size:var(--t-small);letter-spacing:.3em;text-transform:uppercase;color:color-mix(in srgb, var(--bg) 65%, var(--ink))}
+
+  /* ---------- rooms · two clean pages, portrait-friendly grid (mood-driven) ---------- */
+  .rb-head{margin-top:3mm}
+  .rb-head h2{margin-top:2mm}
+  .rb-grid{flex:1;min-height:0;display:grid;gap:9mm;margin-top:6mm;align-content:start}
+  .rb-grid-1{grid-template-columns:repeat(3,1fr)}
+  .rb-grid-2{grid-template-columns:repeat(2,1fr)}
+  .rb-space{display:flex;flex-direction:column;min-width:0}
+  .rb-space .rn{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-sub) * 1.1);
+    color:var(--accent);opacity:.55;line-height:.9}
+  .rb-space h3{margin-top:1.5mm}
+  .rb-space p{font-size:calc(var(--t-body) * .92);line-height:1.5;color:var(--soft);margin-top:1.5mm;max-width:none}
+  .rb-imgs{display:flex;gap:5mm;margin-top:4mm}
+  .rb-imgs .ph{flex:1 1 0;min-width:0;aspect-ratio:3/4;background-color:var(--ph)}
+  html[data-size="mobile"] .rb-grid{display:flex;flex-direction:column;gap:7mm}
+  html[data-size="mobile"] .rb-imgs{flex-direction:column;gap:4mm}
+  html[data-size="mobile"] .rb-imgs .ph{aspect-ratio:3/4}
+
+  /* ===== mobile: brochure flows as full-bleed cards — no fixed-height clipping, no thin-strip images ===== */
+  html[data-size="mobile"] .sheet-fit{width:auto;height:auto;overflow:visible;margin:0 0 16px}
+  html[data-size="mobile"] .sheet{width:100%;height:auto;min-height:0;transform:none;margin:0;padding:30px 20px;
+    box-shadow:0 8px 24px rgba(28,24,19,.16)}
+  html[data-size="mobile"] .sheet.cover{min-height:86vh;padding:0}
+  html[data-size="mobile"] .sheet.back{min-height:58vh;padding:44px 20px}
+  html[data-size="mobile"] .cols{display:flex;flex-direction:column;flex:none;gap:18px;margin-top:16px}
+  html[data-size="mobile"] .cols .img{width:calc(100% + 40px);margin-inline:-20px}   /* full-bleed to the card edges */
+  html[data-size="mobile"] .cols .img.port{aspect-ratio:3/4}
+  html[data-size="mobile"] .cols .img.land{aspect-ratio:3/2}
+  html[data-size="mobile"] .facts{margin-top:18px}
+  html[data-size="mobile"] .coords{margin-top:18px}
+  /* image stack on mobile: flow as full-bleed frames with fixed aspect (no flex-height) */
+  html[data-size="mobile"] .cols .istack{width:calc(100% + 40px);margin-inline:-20px;height:auto;gap:10px}
+  html[data-size="mobile"] .istack>.ph{flex:none;aspect-ratio:3/2}
+  html[data-size="mobile"] .istack>.ph.lead{flex:none;aspect-ratio:4/3}
+  html[data-size="mobile"] .istack>.row{flex:none;gap:10px}
+  html[data-size="mobile"] .istack>.row>.ph{flex:1 1 0;aspect-ratio:3/4}
+  /* galleries on mobile: full-bleed 2-up grid of portrait frames */
+  html[data-size="mobile"] .ghead{flex-direction:column;align-items:flex-start;gap:2mm}
+  html[data-size="mobile"] .ghead p{text-align:left;margin-top:1mm}
+  html[data-size="mobile"] .gal{grid-template-columns:1fr 1fr !important;grid-template-rows:none !important;
+    grid-template-areas:none !important;grid-auto-rows:1fr;gap:8px;height:auto;width:calc(100% + 40px);margin-inline:-20px}
+  html[data-size="mobile"] .gal .ph{aspect-ratio:3/4;grid-area:auto !important}
+  html[data-size="mobile"] .gal .ph.a{grid-column:span 2 !important;aspect-ratio:3/2}
+  html[data-size="mobile"] .gal .ph[data-cap]::after{padding:30px 14px 10px}
+  /* readable caption band on the full-bleed images */
+  html[data-size="mobile"] .ph[data-cap]::after{left:0;right:0;padding:34px 18px 12px;background:linear-gradient(transparent,rgba(20,24,16,.62))}
+
+  /* ---------- at a glance · amenities + icons ---------- */
+  .atlas-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:6mm 7mm;flex:1;align-content:stretch;margin-top:6mm;min-height:0}
+  .amen{display:flex;flex-direction:column;gap:1.4mm;border-top:1px solid var(--line);padding-top:3mm;min-width:0}
+  .amen .amen-ic{width:6.5mm;height:6.5mm;display:block;margin-bottom:1mm;color:var(--accent-ink);stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+  .amen .ak{font-family:var(--sans);font-size:var(--t-small);letter-spacing:.22em;text-transform:uppercase;color:var(--muted-strong)}
+  .amen .av{font-family:var(--disp);font-weight:var(--dispw);font-size:calc(var(--t-body)*1.2);line-height:1.1;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+  .amen .an{font-family:var(--sans);font-size:calc(var(--t-small)*.96);letter-spacing:.02em;color:var(--muted-strong);line-height:1.4}
+  body[data-mood="07"] .amen .av{letter-spacing:.04em;color:#322d24}
+  /* ---------- Ibiza map ---------- */
+  .ibiza-map{margin:0;display:flex;flex-direction:column;min-height:0;flex:1}
+  .ibiza-map svg{width:100%;height:100%;display:block;overflow:visible;min-height:0;flex:1}
+  .ibiza-map .isle{fill:color-mix(in srgb, var(--ink) 18%, var(--bg));stroke:color-mix(in srgb, var(--ink) 32%, var(--bg));stroke-width:.6;stroke-linejoin:round}
+  .ibiza-map .rd{fill:color-mix(in srgb, var(--ink) 9%, var(--bg))}
+  .ibiza-map .dot{fill:color-mix(in srgb, var(--ink) 52%, var(--bg))}
+  .ibiza-map .lbl{fill:var(--ink);font-family:var(--sans);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+  .ibiza-map .hg0{stop-color:var(--accent);stop-opacity:.40}
+  .ibiza-map .hg1{stop-color:var(--accent);stop-opacity:.14}
+  .ibiza-map .hg2{stop-color:var(--accent);stop-opacity:0}
+  .ibiza-map .hich-glow{fill:url(#hichGlow)}
+  .ibiza-map .hich-ring{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.32}
+  .ibiza-map .hich-keyline{fill:var(--bg)}
+  .ibiza-map .hich-dot{fill:var(--ink)}
+  .ibiza-map .hich-lbl{fill:var(--ink);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-anchor:middle}
+  .ibiza-map figcaption{margin-top:3mm;font-family:var(--sans);font-size:var(--t-small);letter-spacing:.24em;text-transform:uppercase;color:var(--muted-strong);text-align:center}
+
+  #pdfDoc{display:none}
+  @media print{
+    body{background:none}
+    .toolbar,.toast{display:none}
+    .sheet-fit{display:contents}
+    .sheet{margin:0;box-shadow:none;transform:none;page-break-after:always;break-after:page}
+    .sheet:last-child{page-break-after:auto;break-after:auto}
+
+    /* ===== MOBILE EXPORT — print a dedicated, flat phone-format document (#pdfDoc):
+       one clean card per page (cover · section title · each photo · back), never sliced.
+       Built by JS so it sidesteps the on-screen scrolling layout entirely.
+       Desktop/A4 print is untouched (rules above). ===== */
+    html[data-size="mobile"] .sheet-fit{display:none}
+    html[data-size="mobile"] #pdfDoc{display:block}
+    html[data-size="mobile"] body{background:var(--bg)}   /* any sub-pt page gap = paper, never white */
+    /* each page fills the physical sheet EXACTLY (calc closes Chrome's ~0.8pt vh shortfall
+       that otherwise leaves a strip where the next page peeks through), clipped — so no
+       gap and nothing from the next page shows. */
+    #pdfDoc .pdf-page{position:relative;width:100%;height:calc(100vh + 1px);overflow:hidden;
+      break-after:page;break-inside:avoid;page-break-inside:avoid;background:var(--bg)}
+    #pdfDoc .pdf-page:last-child{break-after:auto}
+    #pdfDoc .pdf-bg{position:absolute;inset:0;background-repeat:no-repeat;background-position:center;background-size:contain}
+    html.pdf-story #pdfDoc .pdf-bg{background-size:cover}
+    /* cover & back reuse the .cover/.back classes for their authored styling */
+    #pdfDoc .pdf-back{background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;padding:14mm}
+    #pdfDoc .pdf-card{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:12mm}
+    /* at-a-glance — 6 amenities per page, comfortably spaced (split across two pages) */
+    #pdfDoc .pdf-amen{display:flex;flex-direction:column;justify-content:flex-start;padding:16mm 10mm}
+    #pdfDoc .pdf-amen .atlas-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);align-content:stretch;gap:6mm;flex:1;margin-top:10mm}
+    /* map page — headline (top) · island (centre) · coordinates (bottom), filling the sheet */
+    #pdfDoc .pdf-map{display:flex;flex-direction:column;justify-content:space-between;padding:15mm 10mm;background:var(--bg)}
+    #pdfDoc .pdf-map .ghead{display:block;flex:none;margin:0}
+    #pdfDoc .pdf-map .ibiza-map{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;margin:0}
+    #pdfDoc .pdf-map .ibiza-map svg{height:auto;max-height:100%}
+    #pdfDoc .pdf-map .mapfoot{flex:none;text-align:center;margin:0}
+    #pdfDoc .pdf-map .mapfoot .coords{margin:0}
+    /* print-robust wordmark: a real cream SVG image (no CSS mask, which mis-sizes in print) */
+    #pdfDoc .pdf-logo{display:block;margin:0 auto;height:auto}
+    #pdfDoc .pdf-cover .pdf-logo{width:46mm}
+    #pdfDoc .pdf-back .pdf-logo{width:42mm}
+    #pdfDoc .pdf-card .ghead,#pdfDoc .pdf-card .copy{display:block;width:100%}
+    #pdfDoc .pdf-card .ghead p,#pdfDoc .pdf-card .copy p{text-align:left;max-width:none}
+    #pdfDoc .pdf-cap{position:absolute;left:0;right:0;bottom:0;font-family:var(--sans);font-size:8.5pt;
+      letter-spacing:.2em;text-transform:uppercase;color:var(--soft);padding:7mm 6mm 6mm}
+    html.pdf-story #pdfDoc .pdf-cap{color:#fff;background:linear-gradient(transparent,rgba(20,24,16,.6))}
+  }
+</style>
+</head>
+<body>
+
+<!-- amenity icon sprite (referenced by the "at a glance" grid, A4 + mobile) -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false"><defs>
+  <symbol id="ic-location" viewBox="0 0 24 24"><path d="M12 21s6-5.4 6-10a6 6 0 1 0-12 0c0 4.6 6 10 6 10Z"/><circle cx="12" cy="11" r="2"/></symbol>
+  <symbol id="ic-coworking" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="11" rx="1"/><path d="M9 20h6M12 16v4"/></symbol>
+  <symbol id="ic-studios" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="9" rx="1"/><path d="M12 13v3M6 21l3-5M18 21l-3-5"/></symbol>
+  <symbol id="ic-events" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="3" rx="1"/><path d="M6 11v8M18 11v8"/></symbol>
+  <symbol id="ic-stay" viewBox="0 0 24 24"><path d="M3 18V8M3 18h18M3 14h18M21 18v-4a3 3 0 0 0-3-3H10v3"/></symbol>
+  <symbol id="ic-yoga" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2"/><path d="M12 8v4M5 19c2-4 5-7 7-7s5 3 7 7M7 19h10"/></symbol>
+  <symbol id="ic-massage" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/></symbol>
+  <symbol id="ic-pool" viewBox="0 0 24 24"><path d="M3 14c1.6 1.6 3.4 1.6 5 0s3.4-1.6 5 0 3.4 1.6 5 0M3 18c1.6 1.6 3.4 1.6 5 0s3.4-1.6 5 0 3.4 1.6 5 0M9 11V5h3M9 8h3"/></symbol>
+  <symbol id="ic-sauna" viewBox="0 0 24 24"><path d="M3 19a9 9 0 0 1 18 0M2 19h20M9 4c0 1.6-1 1.6-1 3M14 3c0 1.6-1 1.6-1 3"/></symbol>
+  <symbol id="ic-gym" viewBox="0 0 24 24"><path d="M6 9v6M4 8v8M9 12h6M18 9v6M20 8v8"/></symbol>
+  <symbol id="ic-sound" viewBox="0 0 24 24"><path d="M5 9v6h3l4 4V5L8 9H5Z"/><path d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10"/></symbol>
+  <symbol id="ic-parking" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16V8h3a2.5 2.5 0 0 1 0 5h-3"/></symbol>
+</defs></svg>
+
+<div class="toolbar">
+  <button class="tb-back" onclick="history.back()">← Showroom</button>
+  <div class="tb-seg" role="tablist" aria-label="Brochure format">
+    <button class="seg active" data-view="desktop">A4 · Desktop</button>
+    <button class="seg" data-view="mobile">Mobile</button>
+  </div>
+  <div class="tb-act" data-for="desktop">
+    <button class="act-dl" data-file="downloads/HICH-House-A4.pdf">A4 PDF ↓</button>
+    <button class="act-dl act-2nd" data-file="downloads/HICH-House-Mobile-Fullbleed.pdf">Mobile · full-bleed ↓</button>
+    <button class="act-dl act-2nd" data-file="downloads/HICH-House-Mobile-Whole.pdf">Mobile · ganz ↓</button>
+  </div>
+  <div class="tb-act" data-for="mobile" hidden>
+    <button class="act-dl" data-file="downloads/HICH-House-Mobile-Fullbleed.pdf">PDF · full-bleed ↓</button>
+    <button class="act-dl" data-file="downloads/HICH-House-Mobile-Whole.pdf">PDF · ganz ↓</button>
+    <button class="act-share">Share</button>
+  </div>
+</div>
+
+<!-- 1 · COVER -->
+<section class="sheet cover no-pad">
+  <div class="ph full" id="coverHero" style="background-image:url('assets/photos/terrace.jpg')" role="img" aria-label="The house from the garden at HICH House"></div>
+  <div class="scrim"></div>
+  <div class="frame">
+    <div class="folio"><span>Santa Gertrudis · Ibiza</span><span>Est. 2026</span></div>
+    <div class="center">
+      <span class="wordmark logo" role="img" aria-label="HICH House"></span>
+      <div class="tag">A creative house with rooms</div>
+      <div class="line">A space beyond the noise of everyday life.</div>
+    </div>
+    <div class="folio"><span>39°01′ N · 1°26′ E</span><span>Coworking · Studios · Events · Stay</span></div>
+  </div>
+</section>
+
+<!-- 2 · THE NAME & ARRIVAL -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>01 · The Name</span></div>
+  <div class="cols">
+    <div class="copy">
+      <span class="eyebrow acc">The Name</span>
+      <h2>In Farsi, <em>Hich</em> means Nothingness.</h2>
+      <p class="lede">Not emptiness, but the freedom of simply being.</p>
+      <p>Hidden in the quiet heart of Santa Gertrudis, Ibiza, HICH House was created as a space beyond the noise of everyday life. Passing through the arched gateway inspired by ancient Persian philosophy and architecture, you symbolically step from the outer world into an inner one — a place to slow down, reconnect, and simply be.</p>
+      <div class="facts">
+        <div><b>From the airport</b><span>± 20 min</span></div>
+        <div><b>From Ibiza Town</b><span>± 15 min</span></div>
+        <div><b>The village</b><span>Santa Gertrudis</span></div>
+        <div><b>Private parking</b><span>up to 25 cars</span></div>
+      </div>
+    </div>
+    <div class="img istack">
+      <div class="ph lead" style="background-image:url('assets/photos/arch.jpg')" data-cap="The arched gateway" role="img" aria-label="The arched gateway into the garden"></div>
+      <div class="ph pos-b" style="background-image:url('assets/photos/court.jpg')" data-cap="The inner courtyard" role="img" aria-label="The sunken lantern courtyard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · THE SOCIAL HEART · feature + four -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>02 · The Social Heart</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Gather &amp; unwind</span>
+      <h2>The <em>social</em> heart.</h2>
+    </div>
+    <p>Salons, lounges and the majlis — made for long, slow evenings.</p>
+  </div>
+  <div class="gal l-feature">
+    <div class="ph a" style="background-image:url('assets/photos/salon.jpg')" data-cap="Salon" role="img" aria-label="The salon, Persian miniatures"></div>
+    <div class="ph b" style="background-image:url('assets/photos/living.jpg')" data-cap="Living room" role="img" aria-label="The living room and bookshelves"></div>
+    <div class="ph c" style="background-image:url('assets/photos/majlis.jpg')" data-cap="The majlis" role="img" aria-label="The draped majlis lounge"></div>
+    <div class="ph d" style="background-image:url('assets/photos/lounge.jpg')" data-cap="Lantern lounge" role="img" aria-label="The lantern-wall lounge"></div>
+    <div class="ph e" style="background-image:url('assets/photos/snug.jpg')" data-cap="The snug" role="img" aria-label="The media snug"></div>
+  </div>
+</section>
+
+<!-- 4 · QUIET CORNERS · tall feature + two -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>03 · Quiet Corners</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">In the details</span>
+      <h2>Quiet <em>corners.</em></h2>
+    </div>
+    <p>The piano, a painting, a handful of flowers — the house in its smaller moments.</p>
+  </div>
+  <div class="gal l-tall">
+    <div class="ph a pos-b" style="background-image:url('assets/photos/piano.jpg')" data-cap="The piano" role="img" aria-label="The piano corner"></div>
+    <div class="ph b" style="background-image:url('assets/photos/salon2.jpg')" data-cap="Salon · detail" role="img" aria-label="Salon, painting detail"></div>
+    <div class="ph c" style="background-image:url('assets/photos/corner.jpg')" data-cap="A still life" role="img" aria-label="A still-life corner"></div>
+  </div>
+</section>
+
+<!-- 5 · KITCHEN & TABLE · two big + three -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>04 · Kitchen &amp; Table</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Cook &amp; gather</span>
+      <h2>Kitchen &amp; <em>table.</em></h2>
+    </div>
+    <p>Long lunches and late dinners — where the house comes together.</p>
+  </div>
+  <div class="gal l-bigtop">
+    <div class="ph a" style="background-image:url('assets/photos/kitchen.jpg')" data-cap="The kitchen" role="img" aria-label="The walnut kitchen"></div>
+    <div class="ph b" style="background-image:url('assets/photos/longtable.jpg')" data-cap="The long table" role="img" aria-label="The long table for dinners"></div>
+    <div class="ph c" style="background-image:url('assets/photos/dining.jpg')" data-cap="Dining room" role="img" aria-label="The draped dining room"></div>
+    <div class="ph d pos-t" style="background-image:url('assets/photos/kitchen2.jpg')" data-cap="Kitchen · detail" role="img" aria-label="Kitchen still life"></div>
+    <div class="ph e pos-b" style="background-image:url('assets/photos/cowork.jpg')" data-cap="The breakfast nook" role="img" aria-label="The breakfast and lounge nook"></div>
+  </div>
+</section>
+
+<!-- 6 · STUDIOS & CRAFT · tall feature + two -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>05 · Studios &amp; Craft</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Make &amp; work</span>
+      <h2>Studios &amp; <em>craft.</em></h2>
+    </div>
+    <p>Ateliers and quiet desks for residencies, shoots and slow projects.</p>
+  </div>
+  <div class="gal l-tall">
+    <div class="ph a" style="background-image:url('assets/photos/craft.jpg')" data-cap="Crafted detail" role="img" aria-label="A crafted console and mirror"></div>
+    <div class="ph b" style="background-image:url('assets/photos/desk.jpg')" data-cap="Workspace" role="img" aria-label="A single desk workspace"></div>
+    <div class="ph c" style="background-image:url('assets/photos/games.jpg')" data-cap="Backgammon" role="img" aria-label="The backgammon board"></div>
+  </div>
+</section>
+
+<!-- 7 · ROOMS & SUITES · wide top + three -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>06 · Rooms &amp; Suites</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Stay the season</span>
+      <h2>Rooms &amp; <em>suites.</em></h2>
+    </div>
+    <p>Rooms and suites above the studios — stay the night, or the season.</p>
+  </div>
+  <div class="gal l-feature">
+    <div class="ph a" style="background-image:url('assets/photos/stay.jpg')" data-cap="The suite" role="img" aria-label="The master suite"></div>
+    <div class="ph b" style="background-image:url('assets/photos/room.jpg')" data-cap="Room" role="img" aria-label="A bedroom in olive linen"></div>
+    <div class="ph c pos-b" style="background-image:url('assets/photos/room2.jpg')" data-cap="Reading corner" role="img" aria-label="A bedroom reading corner"></div>
+    <div class="ph d" style="background-image:url('assets/photos/retreat.jpg')" data-cap="Retreat" role="img" aria-label="The terracotta bedroom"></div>
+    <div class="ph e" style="background-image:url('assets/photos/view.jpg')" data-cap="The view" role="img" aria-label="The view over the pool and valley"></div>
+  </div>
+</section>
+
+<!-- 8 · THE BATHS · tall feature + three -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>07 · The Baths</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Water &amp; stone</span>
+      <h2>The <em>baths.</em></h2>
+    </div>
+    <p>Sculpted terracotta, stone basins and deep tubs — microcement and calm.</p>
+  </div>
+  <div class="gal l-quad">
+    <div class="ph a" style="background-image:url('assets/photos/shower.jpg')" data-cap="The shower" role="img" aria-label="The sculpted terracotta shower"></div>
+    <div class="ph b pos-b" style="background-image:url('assets/photos/bath.jpg')" data-cap="The bath" role="img" aria-label="The bath, tub and robes"></div>
+    <div class="ph c" style="background-image:url('assets/photos/basin.jpg')" data-cap="Stone basin" role="img" aria-label="A stone basin detail"></div>
+    <div class="ph d" style="background-image:url('assets/photos/basin2.jpg')" data-cap="Bath · detail" role="img" aria-label="Double stone basins"></div>
+  </div>
+</section>
+
+<!-- 9 · WELLBEING · two big + three -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>08 · Wellbeing</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Body &amp; soul</span>
+      <h2><em>Wellbeing</em>, by nature.</h2>
+    </div>
+    <p>A 70 m² yoga deck, mandala massage, a 9-person iglu sauna and ice bath.</p>
+  </div>
+  <div class="gal l-grid6">
+    <div class="ph" style="background-image:url('assets/photos/massage.jpg')" data-cap="The massage deck" role="img" aria-label="The massage deck under jasmine"></div>
+    <div class="ph" style="background-image:url('assets/photos/yoga.jpg')" data-cap="Yoga deck" role="img" aria-label="The 70 sqm yoga deck"></div>
+    <div class="ph" style="background-image:url('assets/photos/sauna.jpg')" data-cap="Iglu sauna" role="img" aria-label="The iglu sauna in the garden"></div>
+    <div class="ph" style="background-image:url('assets/photos/saunagarden.jpg')" data-cap="Dry garden &amp; plunge" role="img" aria-label="The sauna garden and cold plunge"></div>
+    <div class="ph" style="background-image:url('assets/photos/rockshower.jpg')" data-cap="Rock shower" role="img" aria-label="The outdoor rock shower"></div>
+    <div class="ph" style="background-image:url('assets/photos/massage2.jpg')" data-cap="Massage · jasmine" role="img" aria-label="The jasmine massage pergola"></div>
+  </div>
+</section>
+
+<!-- 10 · POOL & WATER · tall feature + three -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>09 · The Pool</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Beach-style, organic</span>
+      <h2>The <em>pool.</em></h2>
+    </div>
+    <p>An organic, beach-style pool set under the sculptural pavilion roof.</p>
+  </div>
+  <div class="gal l-quad">
+    <div class="ph a" style="background-image:url('assets/photos/pool.jpg')" data-cap="The pool" role="img" aria-label="The organic beach-style pool"></div>
+    <div class="ph b" style="background-image:url('assets/photos/pool2.jpg')" data-cap="Golden hour" role="img" aria-label="The pool at golden hour"></div>
+    <div class="ph c" style="background-image:url('assets/photos/pool3.jpg')" data-cap="Under the canopy" role="img" aria-label="The pool under the pavilion canopy"></div>
+    <div class="ph d" style="background-image:url('assets/photos/poolside.jpg')" data-cap="Poolside" role="img" aria-label="A poolside detail"></div>
+  </div>
+</section>
+
+<!-- 11 · THE GARDEN · feature + four -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>10 · The Garden</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">Between the trees</span>
+      <h2>The <em>garden.</em></h2>
+    </div>
+    <p>Pavilions, terraces and quiet corners through the Ibiza pines.</p>
+  </div>
+  <div class="gal l-grid6">
+    <div class="ph" style="background-image:url('assets/photos/garden.jpg')" data-cap="The garden" role="img" aria-label="The organic garden pavilion"></div>
+    <div class="ph" style="background-image:url('assets/photos/pavilion2.jpg')" data-cap="The pavilion · dusk" role="img" aria-label="The pavilion at dusk"></div>
+    <div class="ph" style="background-image:url('assets/photos/terrace.jpg')" data-cap="The terrace" role="img" aria-label="The covered lounge terrace"></div>
+    <div class="ph" style="background-image:url('assets/photos/gardenseat.jpg')" data-cap="Garden seating" role="img" aria-label="The round garden daybed"></div>
+    <div class="ph" style="background-image:url('assets/photos/nook.jpg')" data-cap="Garden nook" role="img" aria-label="The garden lounge nook"></div>
+    <div class="ph" style="background-image:url('assets/photos/sunset.jpg')" data-cap="Dusk" role="img" aria-label="Sunset over the garden"></div>
+  </div>
+</section>
+
+<!-- 11 · THE HOUSE · AT A GLANCE -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>11 · At a Glance</span></div>
+  <div class="ghead">
+    <div class="gh-l">
+      <span class="eyebrow acc">The House · at a glance</span>
+      <h2>Everything, under <em>one roof.</em></h2>
+    </div>
+    <p>Coworking, studios, events &amp; stay — with a garden made for wellbeing.</p>
+  </div>
+  <div class="atlas-grid">
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-location"/></svg><span class="ak">Location</span><span class="av">Santa Gertrudis</span><span class="an">2 km from the village · 20 min from the airport</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-coworking"/></svg><span class="ak">Coworking</span><span class="av">Fibre Wi-Fi</span><span class="an">Long tables, single desks, quiet corners</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-studios"/></svg><span class="ak">Studios</span><span class="av">Ateliers</span><span class="an">Residencies, shoots, slow projects</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-events"/></svg><span class="ak">Events</span><span class="av">The long table</span><span class="an">Retreats, dinners, gatherings</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-stay"/></svg><span class="ak">Stay</span><span class="av">Rooms &amp; suites</span><span class="an">Travertine baths · washed linen</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-yoga"/></svg><span class="ak">Yoga deck</span><span class="av">70 m²</span><span class="an">Open to nature</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-massage"/></svg><span class="ak">Massage</span><span class="av">Mandala</span><span class="an">4,500 hand-set studs · 2 beds</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-pool"/></svg><span class="ak">Pool</span><span class="av">Organic</span><span class="an">Beach-style, between the trees</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-sauna"/></svg><span class="ak">Sauna</span><span class="av">Iglu · 9</span><span class="an">+ ice bath for recovery</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-gym"/></svg><span class="ak">Gym &amp; games</span><span class="av">Equipped</span><span class="an">Backgammon</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-sound"/></svg><span class="ak">Sound</span><span class="av">House system</span><span class="an">Throughout the house</span></div>
+    <div class="amen"><svg class="amen-ic" aria-hidden="true"><use href="#ic-parking"/></svg><span class="ak">Parking</span><span class="av">Up to 25</span><span class="an">Private, on site</span></div>
+  </div>
+</section>
+
+<!-- 12 · LOCATION & AROUND -->
+<section class="sheet">
+  <div class="folio"><span>HICH House</span><span>12 · Location &amp; Around</span></div>
+  <div class="cols">
+    <div class="copy">
+      <span class="eyebrow acc">Where to find us</span>
+      <h2>Santa Gertrudis, <em>Ibiza.</em></h2>
+      <p>Hidden in the quiet green heart of the island — minutes from the village, the town and the north-coast beaches.</p>
+      <ul class="dist">
+        <li><b>Santa Gertrudis</b><span>5 min · walk</span></li>
+        <li><b>Ibiza Town &amp; port</b><span>15 min · car</span></li>
+        <li><b>The airport</b><span>20 min · car</span></li>
+        <li><b>Benirràs &amp; north coast</b><span>20 min · car</span></li>
+        <li><b>Artisan market</b><span>Thu · summer</span></li>
+      </ul>
+      <div class="coords"><span>39°01′ N</span> · <em>1°26′ E</em></div>
+      <div class="coord-sub">Santa Gertrudis de Fruitera · Ibiza · Spain</div>
+    </div>
+    <figure class="ibiza-map">
+      <svg viewBox="84 242 461 365" role="img" aria-label="Map of Ibiza showing HICH House in Santa Gertrudis, central on the island, with Ibiza Town, the airport, Santa Eulalia, San Antonio, San José, San Carlos and Sant Joan, and the island's road network.">
+        <defs>
+          <radialGradient id="hichGlow" cx="50%" cy="50%" r="50%">
+            <stop class="hg0" offset="0%"/><stop class="hg1" offset="48%"/><stop class="hg2" offset="100%"/>
+          </radialGradient>
+        </defs>
+        <path class="isle" d="M497.7 298.3C494.7 303.0 491.4 305.6 487.1 307.2C485.2 307.8 483.6 307.1 482.2 305.9C479.7 304.1 478.6 304.8 478.3 307.7C478.1 309.6 477.5 311.5 477.0 313.4C474.8 321.8 477.2 328.0 484.4 333.2C487.7 335.7 490.9 338.3 494.2 340.9C495.9 342.2 495.3 343.9 495.0 345.6C494.3 350.6 494.8 351.0 499.8 350.0C502.0 349.6 504.4 348.9 505.7 351.2C507.0 353.3 506.1 355.2 504.3 356.8C503.4 357.5 501.7 358.6 504.1 359.6C505.3 360.2 507.2 360.4 505.7 362.2C504.2 363.8 502.6 366.0 499.9 364.2C498.6 363.3 497.7 361.9 496.6 360.8C494.4 358.4 492.5 358.6 491.6 361.5C490.5 364.6 488.6 366.0 485.3 366.1C483.5 366.1 482.2 366.8 482.1 368.9C481.8 376.0 481.8 376.0 474.2 375.3C473.7 375.3 473.2 375.3 472.0 375.3C475.6 378.6 475.8 380.9 471.0 382.1C469.7 382.5 469.9 383.7 470.0 384.8C470.0 387.0 469.9 389.3 467.9 390.8C467.1 391.4 467.0 392.2 467.4 392.9C469.4 396.3 468.5 400.0 469.0 403.6C469.3 406.2 468.3 406.9 465.7 406.1C462.7 405.2 459.7 404.3 456.7 403.5C453.3 402.7 449.8 401.8 446.5 404.1C445.7 404.7 444.5 405.2 443.5 404.3C440.8 401.9 439.3 404.1 438.6 405.9C437.1 410.1 434.8 413.3 430.0 414.4C429.1 414.7 428.4 415.2 427.3 414.9C423.7 413.7 420.7 416.4 421.9 419.8C423.6 424.8 423.8 429.8 422.9 434.9C422.6 436.6 422.5 438.2 421.1 439.5C420.4 440.1 420.0 440.8 420.4 441.9C421.9 445.8 421.0 447.1 416.6 447.5C415.5 447.6 414.5 447.7 413.3 448.0C415.6 448.5 418.3 448.3 418.8 451.4C419.2 453.6 420.5 455.8 417.8 457.4C415.3 458.8 412.9 459.8 409.9 457.7C404.9 454.0 403.6 454.7 401.8 460.6C400.3 465.3 399.7 470.5 394.7 473.7C392.6 475.0 390.5 474.9 388.6 475.5C382.3 477.7 379.7 483.5 375.3 487.5C373.6 489.0 372.7 491.1 370.7 492.7C369.3 493.9 368.9 495.9 366.2 495.4C363.9 495.0 361.6 494.9 359.3 494.7C357.3 494.6 357.4 492.8 356.6 491.7C355.2 489.7 353.5 488.6 351.1 490.2C349.2 491.5 346.7 492.7 349.1 495.7C350.7 497.8 349.6 501.2 352.9 502.7C353.7 503.0 353.4 504.7 352.2 505.2C350.7 505.8 349.2 505.5 348.8 504.0C347.3 497.3 340.7 497.6 336.0 495.3C335.2 494.8 333.7 494.3 333.4 495.9C333.2 497.0 334.2 497.5 335.2 497.6C337.6 497.9 337.2 499.0 336.4 500.6C332.9 508.0 333.0 508.0 324.5 505.9C319.1 504.5 318.5 504.7 316.7 509.7C315.8 512.2 314.3 514.1 312.1 515.9C306.4 520.7 304.0 527.2 303.6 534.3C303.4 538.0 302.7 541.9 305.1 545.4C305.5 546.0 305.1 547.2 305.0 548.0C304.8 549.3 304.3 550.6 304.4 551.9C304.7 563.3 302.3 574.6 304.2 586.0C304.5 587.5 305.2 589.9 303.4 590.6C301.8 591.3 301.0 589.0 299.9 587.9C296.7 584.9 293.6 581.8 289.9 579.3C286.2 576.8 283.6 577.1 282.4 581.2C280.5 587.4 274.3 589.2 270.1 593.4C271.3 588.3 266.6 584.2 268.7 578.6C270.5 573.8 266.4 569.1 264.5 564.6C261.5 557.1 256.5 550.9 248.9 546.7C244.9 544.5 242.1 544.5 238.5 547.4C237.6 548.2 237.0 549.6 235.6 549.3C232.6 548.5 231.7 550.2 229.8 552.0C226.9 554.7 224.9 557.6 223.5 561.6C222.2 559.3 223.1 557.8 223.3 556.3C223.7 552.7 222.1 550.3 218.7 548.9C215.9 547.7 213.4 546.8 212.5 551.3C211.9 554.4 205.6 556.6 202.6 555.1C201.7 554.6 200.8 554.1 201.1 553.0C201.5 551.4 202.4 550.1 204.1 549.5C205.2 549.2 206.8 549.3 206.7 547.6C206.6 546.0 205.3 546.1 204.0 545.9C202.1 545.7 201.4 544.5 201.5 542.6C201.5 539.0 199.8 537.7 196.1 538.3C193.2 538.8 190.1 537.9 187.3 539.3C186.6 539.7 185.9 539.3 185.6 538.7C183.8 535.0 179.8 536.0 176.9 535.5C174.6 535.0 171.6 536.0 170.5 538.7C169.5 541.5 167.5 543.6 165.7 545.9C163.4 548.8 160.6 551.4 161.0 555.8C161.3 559.2 157.8 560.5 155.0 561.3C153.3 561.8 152.2 560.6 151.6 558.7C150.2 554.6 149.5 550.1 146.0 546.8C141.3 542.6 138.3 541.8 132.2 544.2C133.1 540.8 132.9 537.8 130.1 535.3C128.8 534.1 129.9 532.0 130.1 530.3C130.8 526.6 132.0 523.5 126.9 520.6C121.2 517.5 119.7 508.0 122.5 502.2C124.1 498.8 126.4 495.8 129.1 492.8C126.0 492.2 125.8 491.6 127.0 488.3C128.4 484.1 131.4 482.4 134.0 479.5C137.2 476.0 138.9 471.1 141.1 466.8C141.7 465.7 141.6 464.3 140.5 463.6C136.2 460.9 133.6 457.3 132.6 452.6C132.5 452.3 132.0 451.8 131.8 451.8C126.5 452.4 126.3 447.1 123.4 445.0C122.1 444.1 121.9 442.7 122.9 441.6C124.7 439.5 126.4 437.0 128.8 435.7C133.0 433.5 134.1 429.7 135.7 426.0C136.1 424.9 135.7 423.3 137.5 423.3C139.0 423.3 139.5 424.5 139.8 425.7C140.3 427.9 141.1 428.9 143.0 426.5C143.8 425.4 145.4 425.3 146.7 425.0C147.6 424.7 148.6 424.4 149.2 425.4C149.8 426.3 149.3 427.1 148.7 427.9C148.1 428.6 146.7 429.3 147.7 430.5C148.5 431.3 149.8 431.1 150.8 430.9C154.9 430.1 158.8 428.0 163.1 429.4C163.4 429.5 164.1 429.4 164.2 429.1C166.7 425.8 168.1 427.0 169.4 430.0C169.7 430.6 171.4 431.5 171.5 430.3C171.7 427.0 174.1 428.1 175.6 428.1C177.7 428.0 179.5 427.7 181.2 426.3C185.5 423.0 192.1 423.4 197.2 426.9C202.6 430.6 203.0 427.5 202.1 424.2C201.8 422.8 202.2 420.8 201.0 418.8C199.6 416.5 195.8 415.4 197.7 411.3C198.9 408.8 196.2 407.2 193.9 406.3C187.9 403.9 186.5 395.9 191.6 392.1C193.4 390.7 193.2 388.2 195.6 387.0C197.6 386.0 198.7 383.5 200.2 381.7C196.0 379.6 195.2 377.1 197.3 372.9C198.3 370.9 197.2 369.4 196.2 367.8C192.7 362.5 192.9 361.0 197.6 356.6C199.9 354.5 202.1 352.1 205.4 351.2C207.4 350.6 208.1 348.7 209.0 347.1C210.9 343.7 212.4 340.1 217.8 340.4C220.7 340.6 222.8 337.9 225.2 336.5C225.8 336.2 226.2 335.6 225.9 334.9C224.2 331.1 227.2 330.9 229.7 330.1C232.9 329.2 236.0 328.2 239.5 329.8C241.1 330.6 242.3 329.6 243.2 327.8C244.6 324.6 245.2 321.4 244.6 318.0C244.5 317.0 244.2 315.6 245.5 315.2C246.7 314.9 247.0 316.1 247.6 316.8C248.8 318.5 250.2 318.1 251.3 316.9C253.3 314.8 255.7 312.9 256.1 309.8C256.4 307.7 257.9 306.6 260.1 306.6C262.5 306.6 262.8 308.4 263.2 310.0C263.5 311.0 263.8 312.0 264.1 313.0C266.0 318.1 267.2 318.9 272.8 318.8C275.3 318.8 278.3 315.2 278.9 311.5C280.0 304.0 285.7 299.1 292.4 299.5C295.7 299.7 297.3 303.0 300.7 303.2C302.2 303.3 303.5 303.9 304.7 302.6C305.0 302.3 305.4 302.0 305.7 302.0C314.4 302.3 313.4 295.4 314.9 290.6C315.9 287.6 318.2 286.3 320.7 285.0C322.9 284.0 324.1 285.6 325.5 287.0C327.0 288.5 328.8 289.8 331.1 290.0C334.1 290.2 335.1 291.2 333.6 293.9C333.1 295.0 333.3 295.9 334.2 297.0C335.9 296.1 336.5 294.6 337.2 293.0C337.6 291.9 338.1 290.8 338.8 289.9C340.3 288.1 343.7 289.5 344.6 287.9C345.3 286.6 343.6 284.4 344.9 282.5C346.3 280.5 348.1 279.6 350.4 278.8C353.3 277.9 358.1 278.0 356.3 272.8C357.4 272.0 358.0 272.8 358.5 273.3C360.9 275.7 362.8 275.4 364.8 272.7C367.7 268.8 370.3 268.8 373.5 272.4C374.1 273.1 374.5 274.1 375.7 273.9C377.0 273.8 377.2 272.6 377.4 271.6C377.7 270.2 377.8 268.7 378.0 267.3C378.3 265.4 379.3 264.1 381.5 264.3C383.6 264.4 385.1 265.3 385.2 267.6C385.3 269.5 384.7 271.6 386.3 273.2C388.4 275.5 390.7 276.5 393.8 274.8C397.0 273.1 400.4 271.7 398.8 267.3C398.4 266.0 397.9 264.8 397.6 263.5C397.3 262.1 397.5 260.6 399.2 259.9C400.8 259.2 402.0 260.0 403.0 261.2C403.7 262.1 404.0 263.5 405.6 263.5C406.7 261.3 403.7 258.5 406.0 257.0C407.8 255.9 410.4 257.7 412.7 257.9C415.2 258.1 417.5 257.6 419.5 256.0C422.0 254.2 429.4 254.8 431.2 257.1C432.8 259.2 432.8 261.3 430.7 263.4C427.3 266.9 427.3 267.2 431.9 268.5C435.3 269.4 436.5 272.8 439.5 274.2C442.6 275.7 445.2 277.6 446.1 281.4C446.8 284.2 449.6 284.4 451.9 282.4C457.0 277.7 466.1 276.8 472.7 280.0C474.5 280.8 476.6 282.2 478.4 279.6C479.4 278.1 480.4 279.2 480.9 280.2C482.3 282.9 484.6 284.7 487.4 285.8C490.7 287.1 491.5 288.2 488.7 291.1C485.6 294.4 486.1 296.9 489.4 299.3C490.8 300.3 491.6 300.3 497.7 298.3Z"/>
+        <path class="isle" d="M122.6 403.7C122.6 406.7 122.6 408.7 120.5 410.2C118.3 411.6 118.8 413.0 121.3 413.5C123.5 414.0 125.0 414.8 125.0 417.4C125.0 420.0 122.6 420.8 120.9 421.8C118.8 423.0 117.7 420.7 116.3 419.6C109.8 414.2 112.3 404.8 117.7 400.2C119.9 398.4 121.7 398.8 122.4 401.5C122.7 402.5 122.6 403.5 122.6 403.7Z M110.3 548.5C110.2 551.4 106.2 554.5 102.9 554.2C95.7 553.4 95.7 553.4 100.2 547.4C101.4 545.8 102.5 544.2 104.8 543.9C108.1 543.4 110.4 545.3 110.3 548.5Z M529.2 348.1C527.7 350.3 529.5 351.1 530.9 352.2C532.2 353.1 533.4 354.6 532.5 356.2C531.5 357.9 529.6 357.3 528.1 356.8C525.2 355.7 522.1 354.7 522.1 350.8C522.1 349.6 520.7 349.0 520.0 348.1C519.1 346.9 519.1 345.7 520.5 345.1C521.5 344.7 522.7 343.9 522.9 346.3C523.1 348.7 524.7 346.7 525.5 346.4C527.5 345.6 529.2 345.1 529.2 348.1Z"/>
+        <path class="rd" d="M335.4 463.0C334.4 465.6 333.0 468.1 332.5 470.9C332.0 473.8 332.3 476.8 332.3 479.7C332.2 481.3 332.1 482.9 331.7 484.4C331.5 485.0 331.3 485.8 330.8 486.2C330.1 486.7 329.2 486.6 328.4 486.5C326.3 486.4 324.4 486.7 322.6 488.0C318.1 479.0 313.5 470.0 309.0 461.0C306.5 456.0 304.0 451.1 301.5 446.1C299.7 442.3 297.6 438.4 294.1 435.8C290.4 433.0 285.7 432.8 281.2 432.5C276.1 432.1 270.9 431.3 265.9 430.2C256.0 428.2 246.3 425.1 236.6 422.0C226.5 418.8 216.4 415.5 206.0 413.3C206.7 411.6 208.5 410.6 210.3 410.4C212.8 410.0 215.4 410.9 217.8 411.5C221.9 412.6 226.2 413.1 230.5 413.2C238.8 413.2 247.2 411.0 253.9 405.9C255.6 404.5 257.4 402.9 259.7 402.4C262.0 402.0 264.3 402.5 266.6 402.1C270.2 401.3 273.5 398.7 275.0 395.3C275.4 394.4 275.5 393.4 276.0 392.6C276.6 391.3 277.8 391.3 279.1 391.2C281.1 391.0 283.0 390.3 284.7 389.2C288.6 387.0 291.9 383.5 296.4 382.6C299.0 382.1 301.1 383.1 302.9 384.8C301.1 385.4 299.6 386.9 299.1 388.8C298.7 390.1 298.8 391.6 299.3 392.9C299.6 393.5 299.9 394.0 300.3 394.5C300.7 395.0 301.5 395.4 301.8 396.0C302.2 396.9 300.9 398.0 300.6 398.7C300.0 399.8 299.8 401.1 300.5 402.2C301.2 403.2 302.5 403.8 303.6 404.2C305.4 404.9 307.2 405.5 309.0 406.2C310.2 406.6 310.8 404.7 309.6 404.2C308.1 403.7 306.7 403.2 305.2 402.7C304.3 402.3 302.7 402.0 302.2 401.1C301.7 400.3 302.5 399.4 302.9 398.7C303.4 397.9 303.9 397.1 303.9 396.2C303.8 395.0 303.0 394.3 302.2 393.6C301.4 392.8 300.9 391.8 300.9 390.7C300.7 388.5 302.5 386.7 304.6 386.4C305.8 387.6 307.0 388.8 308.4 389.7C312.4 392.6 317.4 394.0 322.3 393.9C322.3 393.9 322.4 393.9 322.4 393.9C322.2 394.2 322.2 394.5 322.4 394.9C329.4 404.0 334.0 415.0 335.3 426.4C336.0 432.5 335.4 438.5 335.2 444.5C335.2 447.7 335.5 450.7 336.0 453.8C336.4 457.0 336.5 459.9 335.4 463.0M312.9 497.2C310.1 498.6 306.8 499.2 303.7 500.1C300.5 501.0 297.3 501.8 294.1 502.7C280.4 506.5 266.7 510.3 253.0 514.1C251.9 513.7 251.5 513.7 250.6 513.9C245.1 515.6 240.4 514.7 235.5 512.5C232.9 511.3 230.3 509.9 227.6 508.9C225.0 507.9 222.4 507.6 219.8 506.9C218.7 506.6 217.7 506.1 216.9 505.3C215.9 504.1 215.4 502.5 214.9 501.2C213.9 498.5 212.9 495.9 211.9 493.3C210.2 489.3 207.9 484.9 203.6 483.2C200.9 482.1 197.9 482.6 195.1 482.5C192.2 482.4 188.6 482.1 186.1 480.6C185.0 479.9 184.2 479.0 185.1 477.8C185.9 476.8 187.0 476.0 187.7 474.9C189.2 472.8 189.8 470.3 189.8 467.8C189.7 465.2 189.4 462.9 190.7 460.5C191.7 458.8 193.2 457.5 194.7 456.2C198.0 453.6 201.7 451.5 204.2 448.1C207.8 443.5 207.8 437.4 206.8 431.9C205.8 426.2 203.5 420.6 203.2 414.8C222.7 418.6 241.2 426.4 260.5 431.1C265.3 432.2 270.2 433.2 275.2 433.8C279.9 434.5 285.0 434.2 289.6 435.7C294.0 437.2 296.6 440.9 298.7 444.9C301.1 449.5 303.4 454.2 305.7 458.9C310.8 469.1 315.9 479.2 321.0 489.3C318.3 492.0 316.5 495.5 312.9 497.2M470.0 294.1C469.8 292.8 467.9 293.4 468.1 294.6C468.9 300.5 469.6 306.7 468.5 312.6C468.0 315.5 467.1 318.3 465.6 320.8C463.9 323.4 461.5 325.2 459.2 327.2C456.8 329.3 455.3 331.7 453.7 334.3C452.8 335.7 451.9 336.9 450.7 337.9C449.6 338.9 448.7 339.8 448.5 341.3C448.4 342.7 448.6 344.0 448.2 345.4C447.8 346.6 447.2 347.8 446.6 348.9C445.1 351.1 443.4 353.1 442.0 355.3C440.6 357.6 439.9 359.9 439.9 362.6C439.9 364.4 439.8 365.9 439.0 367.6C438.3 369.0 437.4 370.4 436.6 371.8C433.6 377.1 431.5 382.9 429.1 388.5C426.7 394.0 424.0 399.5 419.8 403.8C418.7 404.9 417.6 406.1 416.1 406.6C414.3 407.1 412.4 406.5 410.6 406.2C407.1 405.7 403.6 405.5 400.2 405.4C392.5 405.4 384.9 406.3 377.5 408.3C370.7 410.0 364.4 412.8 358.2 416.0C361.0 412.6 364.0 409.4 367.2 406.3C370.2 403.2 373.3 400.1 375.7 396.6C378.2 392.9 379.7 388.8 379.7 384.4C379.8 379.6 378.5 375.1 377.4 370.5C376.1 365.4 375.6 360.5 376.5 355.3C377.5 350.4 378.9 345.7 379.5 340.7C380.8 330.3 380.0 319.0 385.3 309.6C385.3 309.5 385.3 309.5 385.3 309.5C386.7 308.3 388.0 306.8 389.2 305.3C390.1 304.2 391.1 303.1 392.3 302.4C393.8 301.6 395.4 301.5 397.0 301.0C399.2 300.1 401.3 297.6 399.8 295.2C399.1 294.1 397.3 295.1 398.0 296.2C398.8 297.4 397.5 298.6 396.4 299.0C395.2 299.5 393.8 299.6 392.5 300.1C390.4 300.9 388.9 302.6 387.4 304.3C385.8 306.4 384.1 308.2 381.8 309.5C379.5 310.7 377.0 311.4 374.5 312.1C369.5 313.5 364.6 315.2 359.8 317.4C354.9 319.6 350.1 322.1 345.1 324.0C340.1 326.0 334.8 327.2 329.5 326.9C330.2 325.1 331.0 323.3 331.8 321.5C332.4 320.3 330.6 319.3 330.1 320.5C325.9 329.4 323.0 338.8 320.6 348.3C319.5 353.0 318.4 357.9 317.4 362.7C316.4 367.2 315.6 371.9 315.9 376.6C316.0 379.1 316.5 381.6 317.5 383.9C318.5 386.4 319.9 388.7 321.4 390.9C322.1 392.0 323.8 391.0 323.1 389.9C320.5 386.0 318.4 382.1 317.9 377.3C317.5 372.7 318.3 368.1 319.2 363.6C321.1 354.5 323.2 345.4 326.0 336.5C326.8 334.0 327.7 331.4 328.7 328.9C339.8 329.8 349.9 324.2 359.7 319.6C362.3 318.4 365.0 317.2 367.8 316.2C370.4 315.2 373.1 314.6 375.9 313.8C378.0 313.2 380.1 312.5 382.1 311.5C378.9 319.0 378.7 327.4 378.0 335.4C377.6 340.4 376.8 345.3 375.6 350.2C374.5 355.1 373.6 360.0 374.2 365.0C375.5 374.3 380.3 383.6 375.7 392.7C373.6 396.7 370.5 400.0 367.4 403.2C364.0 406.6 360.7 410.0 357.5 413.6C350.1 422.4 343.8 432.1 337.3 441.6C337.5 437.7 337.8 433.9 337.6 430.0C336.8 417.0 332.1 404.2 324.2 393.9C323.9 393.5 323.5 393.4 323.1 393.5C323.4 392.9 323.2 391.9 322.3 391.9C317.6 392.0 313.0 390.6 309.2 387.9C308.1 387.1 307.1 386.1 306.1 385.0C306.0 384.8 305.8 384.6 305.5 384.5C303.6 382.6 301.7 380.9 298.9 380.5C294.4 380.0 290.4 382.9 286.9 385.4C285.0 386.7 283.1 388.1 280.9 388.8C279.0 389.4 276.7 389.0 275.2 390.4C273.7 391.7 273.6 393.9 272.6 395.6C271.5 397.4 269.7 398.8 267.8 399.6C265.5 400.5 263.3 400.2 261.0 400.3C258.7 400.4 256.8 401.2 255.0 402.5C253.2 403.8 251.5 405.3 249.5 406.4C247.6 407.6 245.6 408.5 243.6 409.2C239.3 410.6 234.9 411.2 230.5 411.2C225.3 411.1 220.4 410.0 215.4 408.9C211.2 407.9 205.6 408.2 204.0 412.9C203.8 412.9 203.6 412.8 203.4 412.8C203.3 412.8 203.3 412.8 203.2 412.8C203.2 412.4 203.2 412.1 203.3 411.8C203.4 410.5 201.4 410.5 201.3 411.8C200.7 418.2 203.0 424.2 204.4 430.3C205.7 435.6 206.2 441.9 202.9 446.6C200.4 450.1 196.4 452.3 193.1 455.0C191.5 456.3 190.0 457.8 189.0 459.5C187.9 461.5 187.6 463.7 187.7 465.9C187.8 469.1 187.7 471.9 185.6 474.5C184.2 476.2 181.7 477.7 183.0 480.3C184.2 482.5 187.0 483.2 189.2 483.7C192.4 484.5 195.6 484.5 198.8 484.5C201.6 484.4 203.9 485.1 205.9 487.1C207.6 488.9 208.8 491.1 209.7 493.4C210.9 496.1 211.9 498.9 213.0 501.7C213.9 504.1 214.7 506.6 217.1 507.9C219.6 509.3 222.7 509.4 225.4 510.2C228.7 511.3 231.8 513.0 234.9 514.4C239.6 516.4 245.1 518.0 250.1 516.3C250.1 516.4 250.2 516.4 250.2 516.5C255.6 522.1 260.0 528.7 263.1 535.8C263.7 537.0 265.4 536.0 264.9 534.8C261.9 528.0 257.8 521.8 252.8 516.3C265.5 512.7 278.3 509.2 291.0 505.7C297.6 503.8 304.3 502.2 310.9 500.1C313.5 499.3 315.8 498.1 317.7 496.2C319.2 494.6 320.5 492.8 321.9 491.2C321.9 491.2 321.9 491.2 322.0 491.2C322.1 491.5 322.3 491.8 322.4 492.1C323.0 493.3 324.7 492.3 324.1 491.1L323.5 489.8C324.7 489.0 326.0 488.4 327.6 488.5C328.8 488.5 330.1 488.7 331.2 488.2C332.5 487.7 333.1 486.6 333.5 485.3C334.5 482.4 334.2 479.2 334.2 476.1C334.1 472.9 334.6 470.0 335.8 467.0C337.0 464.4 338.1 461.9 338.3 459.1C338.6 455.8 337.7 452.6 337.4 449.4C337.2 447.6 337.2 445.7 337.2 443.9C337.6 444.0 338.1 443.9 338.4 443.5C344.1 435.3 349.5 426.9 355.6 419.1C355.9 419.2 356.2 419.3 356.5 419.1C363.0 415.6 369.6 412.5 376.7 410.5C383.6 408.6 390.8 407.6 397.9 407.5C401.5 407.4 405.0 407.6 408.6 408.0C411.7 408.3 415.4 409.6 418.3 407.7C420.8 406.2 422.8 403.6 424.5 401.2C426.2 398.8 427.7 396.2 429.0 393.5C431.7 388.0 433.7 382.1 436.4 376.6C437.7 373.7 439.5 371.1 440.9 368.2C441.6 366.7 441.9 365.2 441.9 363.5C441.9 362.0 441.9 360.5 442.4 359.0C444.2 354.0 448.9 350.8 450.2 345.6C450.5 344.3 450.4 343.1 450.5 341.7C450.7 340.0 452.6 339.0 453.7 337.8C455.6 335.4 456.8 332.4 458.9 330.2C461.4 327.7 464.4 325.8 466.5 323.0C468.4 320.4 469.6 317.3 470.3 314.2C471.7 307.6 470.9 300.7 470.0 294.1Z M295.0 560.2C292.7 563.5 289.9 566.4 286.7 568.9C286.1 569.3 284.9 570.7 284.1 570.5C283.4 570.3 282.8 569.0 282.6 568.4C281.8 566.8 281.6 565.1 281.0 563.6C280.4 561.8 279.3 560.3 278.3 558.7C277.1 556.9 275.9 555.1 274.7 553.2C272.4 549.5 270.3 545.6 268.4 541.7C267.8 540.5 266.1 541.5 266.6 542.7C268.9 547.2 271.3 551.6 274.0 555.8C275.3 557.9 276.7 559.8 278.0 561.9C279.0 563.6 279.5 565.5 280.1 567.3C280.6 569.0 281.3 570.6 282.6 571.8C284.4 573.4 286.0 571.9 287.6 570.8C291.1 568.1 294.2 564.8 296.7 561.2C297.5 560.2 295.8 559.2 295.0 560.2Z"/>
+        <g class="towns">
+          <circle class="dot" cx="323.3" cy="391.6" r="3.1"/><circle class="dot" cx="266.0" cy="538.5" r="3.1"/><circle class="dot" cx="326.3" cy="496.3" r="4.8"/><circle class="dot" cx="398.7" cy="292.9" r="3.1"/><circle class="dot" cx="298.0" cy="559.3" r="3.1"/><circle class="dot" cx="450.5" cy="341.7" r="3.1"/><circle class="dot" cx="195.1" cy="482.5" r="3.1"/><circle class="dot" cx="419.6" cy="405.8" r="4.8"/><circle class="dot" cx="201.2" cy="412.3" r="4.8"/>
+          <text class="lbl" x="374" y="288">Sant Joan</text><text class="lbl" x="412" y="339"><tspan x="412" dy="0">San</tspan><tspan x="412" dy="10">Carlos</tspan></text><text class="lbl" x="386" y="392"><tspan x="386" dy="0">Santa</tspan><tspan x="386" dy="10">Eulalia</tspan></text><text class="lbl" x="323" y="377"><tspan x="323" dy="0">Santa</tspan><tspan x="323" dy="10">Gertrudis</tspan></text><text class="lbl" x="198" y="397">San Antonio</text><text class="lbl" x="143" y="494">San José</text><text class="lbl" x="293" y="491">Ibiza</text><text class="lbl" x="221" y="536">Airport</text>
+        </g>
+        <g class="hich">
+          <circle class="hich-glow" cx="310.4" cy="406.3" r="16"/>
+          <circle class="hich-ring" cx="310.4" cy="406.3" r="8.6"/>
+          <circle class="hich-keyline" cx="310.4" cy="406.3" r="5.4"/>
+          <circle class="hich-dot" cx="310.4" cy="406.3" r="3.7"/>
+          <text class="hich-lbl" x="310.4" y="427.5">HICH House</text>
+        </g>
+      </svg>
+      <figcaption>Santa Gertrudis · the still centre of Ibiza</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 6 · BACK COVER -->
+<section class="sheet back">
+  <div class="inner">
+    <span class="wordmark logo" role="img" aria-label="HICH House"></span>
+    <h3>Book a room, a studio, or the whole house.</h3>
+    <a class="mail" href="mailto:hello@hichhouse.com">hello@hichhouse.com</a>
+    <span class="meta">Santa Gertrudis · Ibiza · 39°01′ N · 1°26′ E</span>
+  </div>
+</section>
+
+<script src="themes.js"></script>
+<script>
+  (function(){
+    var p = new URLSearchParams(location.search);
+    /* the client chose Bottega (07) — the brochure & its PDF default to it.
+       An explicit ?mood= from the showroom link still wins (for previewing other moods). */
+    var mood = p.get("mood") || "07";
+    /* mobile PDF style: ?pdf=story = full-bleed (cover-crop) pages; default = whole image (contain) */
+    if (p.get("pdf") === "story") document.documentElement.classList.add("pdf-story");
+    var pageStyle = document.createElement("style");
+    document.head.appendChild(pageStyle);
+
+    var VIEWS = {
+      desktop: { page: "297mm 210mm", title: "A4" },
+      mobile:  { page: "110mm 220mm", title: "Mobile" }
+    };
+
+    /* switch the browsable preview — sets the matching @page so the eventual
+       PDF keeps that format. Never prints on its own. */
+    function setView(v){
+      if (!VIEWS[v]) v = "desktop";
+      document.documentElement.dataset.size = v;
+      pageStyle.textContent = "@page{size:" + VIEWS[v].page + ";margin:0}";
+      document.title = "HICH HOUSE — Brochure · " + VIEWS[v].title;
+      document.querySelectorAll(".tb-seg .seg").forEach(function(b){ b.classList.toggle("active", b.dataset.view === v); });
+      document.querySelectorAll(".tb-act").forEach(function(g){ g.hidden = g.dataset.for !== v; });
+      fitZoom();
+    }
+    window.hichSetView = setView;
+
+    /* fit the sheet to the screen for preview (print/PDF uses the real @page size) */
+    /* wrap each sheet so we can scale-to-fit with transform (zoom is unreliable on iOS Safari) */
+    document.querySelectorAll(".sheet").forEach(function(s){
+      var w = document.createElement("div");
+      w.className = "sheet-fit";
+      s.parentNode.insertBefore(w, s);
+      w.appendChild(s);
+    });
+    function fitZoom(){
+      var sheet = document.querySelector(".sheet");
+      if (!sheet) return;
+      var scale = Math.min(1, (innerWidth - 16) / sheet.offsetWidth);   /* offsetWidth is unscaled — transform doesn't change it */
+      document.documentElement.style.setProperty("--bscale", scale);
+    }
+    addEventListener("resize", fitZoom);
+    addEventListener("beforeprint", function(){ document.documentElement.style.setProperty("--bscale", 1); });
+    addEventListener("afterprint", fitZoom);
+
+    /* toast (share fallback) */
+    var toastEl, toastT;
+    function toast(msg){
+      if (!toastEl){ toastEl = document.createElement("div"); toastEl.className = "toast"; document.body.appendChild(toastEl); }
+      toastEl.textContent = msg; toastEl.classList.add("show");
+      clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 2400);
+    }
+
+    function shareLink(){
+      var url = location.origin + location.pathname + "?view=mobile" + (mood ? "&mood=" + mood : "");
+      if (navigator.share){
+        navigator.share({ title: "HICH House — Brochure", text: "HICH House · Santa Gertrudis, Ibiza", url: url }).catch(function(){});
+      } else if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(function(){ toast("Link copied to clipboard"); }, function(){ toast(url); });
+      } else {
+        toast(url);
+      }
+    }
+
+    /* wire the toolbar — every export is an explicit click, no auto-print */
+    document.querySelectorAll(".tb-seg .seg").forEach(function(b){
+      b.addEventListener("click", function(){ setView(b.dataset.view); });
+    });
+    /* download buttons → fetch the pre-built, hosted file (A4 PDF or mobile bundle zip) */
+    document.querySelectorAll(".act-dl").forEach(function(b){
+      b.addEventListener("click", function(){
+        var a = document.createElement("a");
+        a.href = b.getAttribute("data-file"); a.setAttribute("download", "");
+        document.body.appendChild(a); a.click(); a.remove();
+      });
+    });
+    document.querySelectorAll(".act-share").forEach(function(b){
+      b.addEventListener("click", shareLink);
+    });
+
+    /* mood from query (themes.js already applied the default) */
+    if (mood && window.applyMood) applyMood(mood, { silentHash: true });
+
+    /* cover hero follows the mood — each mood's brochure leads with its own signature
+       image, exactly like the showroom hero. Falls back to the authored terrace cover. */
+    if (mood) {
+      var moodObj = (window.HICH_MOODS || []).find(function(x){ return x.no === mood; });
+      if (moodObj && moodObj.hero) {
+        var map = window.HICH_PHOTOS || {};
+        var file = map[moodObj.hero] || (moodObj.hero + ".jpg");
+        var cover = document.getElementById("coverHero");
+        if (cover) {
+          cover.style.backgroundImage = "url('assets/photos/" + file + "')";
+          cover.setAttribute("aria-label", moodObj.name + " — HICH House from the garden");
+        }
+      }
+    }
+
+    /* build the flat phone-format PDF document (#pdfDoc) used when exporting from the
+       mobile view: one clean page per cover / section title / photo / back cover.
+       Built in JS so it bypasses the on-screen scrolling layout (no sliced images). */
+    (function buildPdfDoc(){
+      var old = document.getElementById("pdfDoc"); if (old) old.remove();
+      var doc = document.createElement("div"); doc.id = "pdfDoc";
+      function page(cls){ var d = document.createElement("div"); d.className = "pdf-page " + cls; return d; }
+      /* swap the masked wordmark for a real cream SVG image — masks mis-size in print */
+      function creamLogo(scope){
+        scope.querySelectorAll(".wordmark").forEach(function(w){
+          var img = document.createElement("img"); img.className = "pdf-logo"; img.src = "assets/hich-logo-cream.svg"; img.alt = "HICH House";
+          w.replaceWith(img);
+        });
+      }
+      document.querySelectorAll(".sheet").forEach(function(sheet){
+        if (sheet.classList.contains("cover")){ var pc = page("pdf-cover cover"); pc.innerHTML = sheet.innerHTML; creamLogo(pc); doc.appendChild(pc); return; }
+        if (sheet.classList.contains("back")){ var pb = page("pdf-back back"); pb.innerHTML = sheet.innerHTML; creamLogo(pb); doc.appendChild(pb); return; }
+        /* at-a-glance amenities → one page (header + icon grid) */
+        var atlas = sheet.querySelector(".atlas-grid");
+        if (atlas){
+          var headA = sheet.querySelector(".ghead");
+          var amens = Array.prototype.slice.call(atlas.querySelectorAll(".amen"));
+          var pa1 = page("pdf-amen");
+          pa1.innerHTML = (headA ? headA.outerHTML : "") + '<div class="atlas-grid">' + amens.slice(0,6).map(function(a){ return a.outerHTML; }).join("") + '</div>';
+          doc.appendChild(pa1);
+          var pa2 = page("pdf-amen");
+          pa2.innerHTML = '<div class="ghead"><div class="gh-l"><span class="eyebrow acc">The House · at a glance</span><h2>Wellbeing &amp; <em>the rest.</em></h2></div></div><div class="atlas-grid">' + amens.slice(6).map(function(a){ return a.outerHTML; }).join("") + '</div>';
+          doc.appendChild(pa2);
+          return;
+        }
+        /* location sheet with the Ibiza map → a copy card + a full map page (headline · map · coords) */
+        var map = sheet.querySelector(".ibiza-map");
+        if (map){
+          var copyM = sheet.querySelector(".copy");
+          if (copyM){ var pcm = page("pdf-card"); pcm.innerHTML = copyM.outerHTML; doc.appendChild(pcm); }
+          var coordsM = sheet.querySelector(".coords");
+          var pm = page("pdf-map");
+          pm.innerHTML = '<div class="ghead"><div class="gh-l"><span class="eyebrow acc">The neighbourhood</span><h2>Close to everything, <em>far from noise.</em></h2></div></div>'
+            + map.outerHTML
+            + '<div class="mapfoot">' + (coordsM ? coordsM.outerHTML : "") + '</div>';
+          doc.appendChild(pm); return;
+        }
+        /* generic gallery / two-column sheet */
+        var head = sheet.querySelector(".ghead");
+        if (head){ var ph = page("pdf-card"); ph.innerHTML = head.outerHTML; doc.appendChild(ph); }
+        var copy = sheet.querySelector(".cols > .copy");
+        if (copy){ var pp = page("pdf-card"); pp.innerHTML = copy.outerHTML; doc.appendChild(pp); }
+        sheet.querySelectorAll(".ph").forEach(function(img){
+          if (img.classList.contains("full")) return;           /* the cover hero is handled above */
+          var pi = page("pdf-img");
+          var bg = document.createElement("div"); bg.className = "pdf-bg"; bg.style.backgroundImage = img.style.backgroundImage; pi.appendChild(bg);
+          var cap = img.getAttribute("data-cap");
+          if (cap){ var s = document.createElement("span"); s.className = "pdf-cap"; s.textContent = cap; pi.appendChild(s); }
+          doc.appendChild(pi);
+        });
+      });
+      document.body.appendChild(doc);
+    })();
+
+    /* initial view: explicit ?view= wins; otherwise auto-pick the mobile format on
+       phone-width screens (the A4 landscape is unreadable there) — never auto-prints */
+    var autoView = innerWidth <= 768 ? "mobile" : "desktop";
+    setView(p.get("view") || autoView);
+  })();
+</script>
+
+</body>
+</html>

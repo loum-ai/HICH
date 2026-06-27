@@ -1,0 +1,592 @@
+/* ============================================================
+   HICH HOUSE — Location Showroom
+   Theme-driven: every moodboard direction sets the variables
+   below via themes.js. Defaults = 02 · Amonre (client default).
+   ============================================================ */
+
+:root{
+  --bg:#EFE9DD;
+  --panel:#F4EFE5;
+  --panel2:#FAF6EE;
+  --ink:#3A332A;
+  --accent:#B59A6E;
+  --accent2:#CDB892;
+  --hl:#8A7350;
+  --hl-inv:#CDB892;
+  --hl2:#8F8266;
+  --paper:#F4EFE5;
+  --deep:#3A332A;
+  --hl-ink:color-mix(in srgb, var(--hl) 72%, var(--ink)); /* highlight, guaranteed toward ink for contrast */
+  --muted:#9b8f78;
+  --ph:#d8cdb8;
+  --filter:none;
+  --disp:'Cormorant Garamond',serif;
+  --body-font:'Jost',sans-serif;
+  --dispw:400;
+  --htrack:.01em;
+  /* tracking scale — three voices only (consolidated from 20+ ad-hoc values) */
+  --track-caps:.18em;      /* body micro-caps: nav, buttons, captions, labels, meta */
+  --track-eyebrow:.26em;   /* section eyebrows + standout labels */
+  --track-feature:.34em;   /* hero feature lines + nav sub — wide tracking, used sparingly */
+  --hcase:none;
+  --sans:'Jost',sans-serif;
+  /* derived */
+  --soft:color-mix(in srgb, var(--ink) 88%, var(--bg));
+  --line:color-mix(in srgb, var(--ink) 18%, transparent);
+  --muted-strong:color-mix(in srgb, var(--ink) 52%, var(--muted));
+  --accent-ink:color-mix(in srgb, var(--accent) 33%, var(--ink));
+  /* soft secondary wash — a pale breath of accent2 for the one coloured section beat
+     (Jardin Calcaire → zartes Rosa, Argilla → Sand, Sale & Cobalto → blasses Stahlblau …) */
+  --tint:color-mix(in srgb, var(--accent2) 26%, var(--panel2));
+  --maxw:1280px;
+  --pad-x:clamp(20px,5vw,72px);
+  --reveal-dur:1.1s;
+  --reveal-y:34px;
+  /* canonical type scale — base 1.0625rem (17px), ratio √2 (1.4142)
+     steps: 12 · 14.3 · 17 · 20.2 · 24 · 34 · 48 · 68 · 96 px */
+  --type-base:1.0625rem;
+  --lh-display:1.08;                               /* canonical display-heading line-height */
+  --gap-label:16px;                                /* white space between eyebrow-label and its content */
+  --t--1:0.71875rem;                               /* 11.5 labels (fixed per spec) */
+  --t-h-1:calc(var(--type-base) / 1.1892);         /* 14.3 meta */
+  --t-0:var(--type-base);                          /* 17   body */
+  --t-h1:calc(var(--type-base) * 1.1892);          /* 20.2 lede- */
+  --t-1:calc(var(--type-base) * 1.4142);           /* 24   lede/quote */
+  --t-2:calc(var(--type-base) * 2);                /* 34   h3 */
+  --t-3:calc(var(--type-base) * 2 * 1.4142);       /* 48   titles */
+  --t-4:calc(var(--type-base) * 4);                /* 68   display h2 */
+  --t-5:calc(var(--type-base) * 4 * 1.4142);       /* 96   numerals */
+}
+/* mobile: display steps drop one scale step; body, labels & captions are bumped up for legibility */
+@media(max-width:720px){
+  :root{
+    --type-base:1.125rem;  /* 18px source — lifts body AND every calc-derived step (ledes, .av, etc.) on mobile */
+    --t-5:calc(var(--type-base) * 4);
+    --t-4:calc(var(--type-base) * 2 * 1.4142);
+    --t-3:calc(var(--type-base) * 2);
+    --t-2:calc(var(--type-base) * 1.4142);
+    --t--1:0.8125rem;   /* 13px — eyebrows, photo captions, annotations (fixed) */
+    --t-h-1:0.9375rem;  /* 15px — meta & list rows (fixed) */
+  }
+  /* restrained weight nudge so body copy reads a hair stronger on small screens */
+  body p{font-weight:450}
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+/* reserve the scrollbar space so opening the photo lightbox can't shift the page sideways */
+html{scrollbar-gutter:stable}
+body{background:var(--bg);color:var(--ink);font-family:var(--body-font);line-height:1.6;-webkit-font-smoothing:antialiased;font-optical-sizing:auto;
+  transition:background .5s ease,color .5s ease}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+::selection{background:color-mix(in srgb, var(--accent) 30%, var(--bg));color:var(--ink)}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x)}
+
+/* ---------- recolourable wordmark (mask) ----------
+   Brief: auf DUNKLEM Grund die auslaufende Version, auf HELLEM die vollflächige.
+   --logo-voll zeigt vorerst auf dieselbe Datei — sobald assets/hich-logo-voll.svg
+   hochgeladen ist, hier nur den einen Pfad ändern. */
+:root{--logo-fade:url("assets/hich-logo.svg");--logo-voll:url("assets/hich-logo.svg")}
+.wordmark{display:inline-block;background:currentColor;
+  -webkit-mask:var(--logo-fade) no-repeat center/contain;
+  mask:var(--logo-fade) no-repeat center/contain}
+/* helle Gründe → vollflächig */
+nav.bar.solid .nav-logo,
+body:not(.dark-mood) .panel .wordmark{
+  -webkit-mask:var(--logo-voll) no-repeat center/contain;
+  mask:var(--logo-voll) no-repeat center/contain}
+
+/* ---------- a11y ---------- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:-60px;left:16px;z-index:9999;background:var(--ink);color:var(--bg);padding:14px 20px;
+  font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;text-decoration:none;border-radius:0 0 4px 4px;transition:top .2s}
+.skip-link:focus{top:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.moods-list button:focus-visible,.nav-moods:focus-visible,.mo-close:focus-visible{outline-offset:-2px}
+
+/* ---------- shared editorial atoms ---------- */
+.eyebrow{font-family:var(--sans);font-weight:400;font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--muted-strong)}
+.eyebrow.acc{color:var(--hl)}
+.chapter-no{font-family:var(--disp);font-style:italic;font-weight:var(--dispw);font-size:clamp(var(--t-2),3.4vw,var(--t-3));color:var(--accent);opacity:.5;line-height:.75;letter-spacing:0;flex:none}
+.rule{height:1px;background:var(--line)}
+h1,h2,h3{font-feature-settings:"liga" 1,"kern" 1;text-wrap:balance;line-height:var(--lh-display)}
+[id]{scroll-margin-top:84px}
+
+/* spicier accent rhythm */
+.room:nth-of-type(even) .room-head .rn{color:var(--accent2);opacity:.85}
+.room:nth-of-type(even) .room-ctrl button:hover{background:var(--ink);border-color:var(--ink)}
+.strip .slide figcaption span:last-child{color:#fff;opacity:.82}
+/* courtyard sits on the --tint ground; accent-on-tint clashes in some moods → use the safe label tone */
+#garden .g-pair .gp-copy .eyebrow.acc{color:var(--muted-strong)}
+.mapline .compass span{color:color-mix(in srgb, var(--accent2) 40%, var(--muted-strong))}
+.arr-facts div{border-top:2px solid transparent}
+#arrival .arr-facts div{border-top:2px solid var(--line)}
+#arrival .arr-facts div:first-child{border-top-color:var(--accent)}
+
+/* ---------- progress hairline ---------- */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:9980;transition:width .1s linear}
+
+/* ---------- nav ---------- */
+nav.bar{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;gap:22px;
+  padding:0 clamp(16px,3vw,40px);height:64px;color:var(--paper);transition:background .45s ease,color .45s ease,box-shadow .45s ease}
+nav.bar .nav-logo{height:30px;width:64px;flex:none}
+nav.bar:not(.solid){text-shadow:0 1px 12px rgba(15,18,12,.6)}
+nav.bar .nav-sub{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-feature);text-transform:uppercase;opacity:.92;white-space:nowrap}
+nav.bar ul{display:flex;gap:6px;list-style:none;margin-left:auto}
+nav.bar ul a{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;text-decoration:none;color:inherit;opacity:.88;padding:8px 10px;transition:opacity .2s;position:relative;white-space:nowrap}
+nav.bar ul a::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+nav.bar ul a:hover::after,nav.bar ul a:focus-visible::after{transform:scaleX(1)}
+nav.bar ul a:hover{opacity:1}
+.nav-moods{background:none;border:1px solid color-mix(in srgb, currentColor 45%, transparent);border-radius:24px;cursor:pointer;color:inherit;
+  font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;padding:9px 16px;white-space:nowrap;transition:background .25s,border-color .25s,color .25s}
+.nav-moods:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+nav.bar .nav-cta{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;text-decoration:none;color:var(--bg);
+  background:var(--ink);border:1px solid var(--ink);border-radius:24px;padding:9px 18px;white-space:nowrap;transition:background .25s,color .25s,border-color .25s;text-shadow:none}
+nav.bar .nav-cta:hover{background:color-mix(in srgb, var(--ink) 82%, var(--bg));border-color:color-mix(in srgb, var(--ink) 82%, var(--bg));color:var(--bg)}
+nav.bar.solid{background:color-mix(in srgb, var(--bg) 92%, transparent);color:var(--ink);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+@media(max-width:1240px){nav.bar .nav-sub{display:none}}
+@media(max-width:960px){nav.bar ul{display:none}}
+
+/* ---------- photo atom ---------- */
+.ph{background-color:var(--ph);background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden}
+.ph::before{content:"";position:absolute;inset:0;background-image:var(--img);background-size:cover;background-position:center;
+  transform:scale(1.001);transition:transform 0s}
+.ph.dim::before{filter:var(--filter)}
+.ph[data-cap]::after{content:attr(data-cap);position:absolute;left:0;right:0;bottom:0;z-index:2;font-family:var(--sans);font-size:var(--t--1);
+  letter-spacing:var(--track-caps);text-transform:uppercase;color:#fff;padding:40px 18px 14px;text-shadow:0 1px 4px rgba(20,24,18,.75);
+  background:linear-gradient(transparent,rgba(20,24,18,.58))}
+
+/* Ken Burns (cinematic only) */
+body[data-motion="cinematic"] .kb.ph::before{transform:scale(1.08);transition:transform 9s cubic-bezier(.2,.5,.3,1)}
+body[data-motion="cinematic"] .kb.ph.in::before{transform:scale(1.001)}
+
+/* ---------- reveals ---------- */
+.rv{opacity:0;transform:translateY(var(--reveal-y))}
+.rv.in{opacity:1;transform:none;transition:opacity var(--reveal-dur) cubic-bezier(.2,.6,.2,1),transform var(--reveal-dur) cubic-bezier(.2,.6,.2,1),filter var(--reveal-dur) cubic-bezier(.2,.6,.2,1),clip-path 1.3s cubic-bezier(.2,.6,.2,1)}
+.rv.d1.in{transition-delay:.12s}
+.rv.d2.in{transition-delay:.24s}
+.rv.d3.in{transition-delay:.36s}
+/* cinematic: images get clip-unveil + gentle scale-settle; no blur anywhere */
+body[data-motion="cinematic"] .ph.rv{clip-path:inset(0 0 16% 0);transform:translateY(var(--reveal-y)) scale(1.03)}
+body[data-motion="cinematic"] .ph.rv.in{clip-path:inset(0 0 0 0);transform:none}
+body[data-motion="cinematic"] .strip.rv .slide{opacity:0;transform:translateX(26px)}
+body[data-motion="cinematic"] .strip.rv.in .slide{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)}
+body[data-motion="cinematic"] .strip.rv.in .slide:nth-child(2){transition-delay:.1s}
+body[data-motion="cinematic"] .strip.rv.in .slide:nth-child(3){transition-delay:.2s}
+body[data-motion="cinematic"] .strip.rv.in .slide:nth-child(4){transition-delay:.3s}
+body[data-motion="cinematic"] .strip.rv.in .slide:nth-child(5){transition-delay:.4s}
+body[data-motion="cinematic"] .ch-head.rv .chapter-no{opacity:0;transform:translateX(16px)}
+/* reduced-motion fallback hält dieselbe Ziel-Opacity */
+body[data-motion="cinematic"] .ch-head.rv.in .chapter-no{opacity:.5;transform:none;transition:opacity 1s .3s cubic-bezier(.2,.6,.2,1),transform 1s .3s cubic-bezier(.2,.6,.2,1)}
+/* hairline draws under the italic once revealed */
+.interlude .big em{background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-size:0% 1px;background-position:0 94%}
+body[data-motion="cinematic"] .interlude .big.rv.in em{background-size:100% 1px;transition:background-size 1.4s .7s cubic-bezier(.2,.6,.2,1)}
+body:not([data-motion="cinematic"]) .interlude .big em{background-size:100% 1px}
+body[data-motion="still"] .rv{opacity:1;transform:none;transition:none;filter:none;clip-path:none}
+@media (prefers-reduced-motion: reduce){
+  .rv{opacity:1 !important;transform:none !important;transition:none !important;filter:none !important;clip-path:none !important}
+  body[data-motion="cinematic"] .strip.rv .slide{opacity:1;transform:none}
+  body[data-motion="cinematic"] .ch-head.rv .chapter-no{opacity:.5;transform:none}
+  body[data-motion="cinematic"] .kb.ph::before{transform:none;transition:none}
+  body[data-motion="cinematic"] .hero .h-scroll i{animation:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  .rv{opacity:1 !important;transform:none !important;transition:none !important}
+  nav.bar,.progress,.h-scroll,.moods-overlay{display:none}
+}
+
+/* ============================================================ HERO */
+header.hero{position:relative;height:100svh;min-height:560px;color:var(--paper);overflow:hidden}
+.hero .hero-img{position:absolute;inset:0}
+.hero .hero-img .ph{position:absolute;inset:-6% 0;height:auto}
+/* mood-tinted veil for hero legibility — an even wash in the mood's deep tone + gentle top/bottom
+   gradient. Subtle/exclusive, but enough that the white wordmark & lines read on bright photos. */
+.hero .scrim{position:absolute;inset:0;background:
+  linear-gradient(color-mix(in srgb, var(--deep) 52%, transparent), color-mix(in srgb, var(--deep) 45%, transparent) 50%, color-mix(in srgb, var(--deep) 56%, transparent)),
+  color-mix(in srgb, var(--deep) 18%, transparent)}
+.hero .hero-frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:92px clamp(20px,5vw,64px) clamp(26px,4vh,48px)}
+.hero .h-top{display:flex;justify-content:space-between;gap:12px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-feature);text-transform:uppercase;opacity:.85}
+.hero .h-center{text-align:center;margin:auto 0}
+.hero .hero-logo{height:clamp(96px,17vw,200px);width:clamp(200px,34vw,400px)}
+.hero .h-tagline{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-feature);text-transform:uppercase;opacity:.88;margin-top:10px}
+.hero .h-line{font-family:var(--disp);font-style:italic;font-weight:300;font-size:clamp(var(--t-h1),2.6vw,var(--t-1));margin-top:30px;letter-spacing:.01em;padding:0 10px}
+.hero .h-bot{display:flex;justify-content:space-between;gap:10px;align-items:flex-end;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-feature);text-transform:uppercase;opacity:.82;flex-wrap:wrap}
+.hero .h-scroll{display:flex;flex-direction:column;align-items:center;gap:12px;position:absolute;left:50%;transform:translateX(-50%);bottom:clamp(22px,4vh,44px)}
+.hero .h-scroll span{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-feature);text-transform:uppercase;opacity:.8}
+.hero .h-scroll i{display:block;width:1px;height:44px;background:color-mix(in srgb, currentColor 72%, transparent)}
+body[data-motion="cinematic"] .hero .h-scroll i{animation:drip 2.6s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============================================================
+   SECTION RHYTHM — contrast · repetition · variety per mood
+   ============================================================ */
+/* fixed paper layer: hosts may force body background transparent */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--bg);transition:background .5s ease}
+
+/* ============================================================ THE NAME — interlude (separator page: ink ground, paper voice) */
+.interlude{padding:clamp(84px,13vh,160px) var(--pad-x);text-align:center;border-bottom:1px solid var(--line);background:var(--ink);color:var(--bg)}
+.interlude .big{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),4.2vw,var(--t-4));line-height:1.2;max-width:24ch;margin:26px auto 0;letter-spacing:var(--htrack);text-wrap:balance}
+.interlude .big em{font-style:italic;color:var(--hl-inv, var(--accent))}
+.interlude .small{margin-top:24px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:color-mix(in srgb, var(--bg) 78%, var(--ink))}
+
+/* eyebrow on the ink ground */
+.interlude .eyebrow.acc{color:var(--hl-inv, var(--accent))}
+
+/* ============================================================ INDEX STRIP */
+.chapters{border-bottom:1px solid var(--line);background:var(--panel2)}
+.chapters .wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:0}
+.chapters a{position:relative;display:flex;flex-direction:column;gap:10px;padding:26px 18px 30px;border-left:1px solid var(--line);text-decoration:none;color:var(--ink);transition:background .25s;overflow:hidden}
+.chapters a:last-child{border-right:1px solid var(--line)}
+.chapters a:hover{background:var(--panel)}
+.chapters a::after{content:"↘";position:absolute;top:24px;right:16px;font-family:var(--sans);font-size:var(--t--1);color:var(--hl);opacity:0;transform:translate(-7px,-5px);transition:opacity .25s,transform .25s}
+.chapters a:hover::after{opacity:1;transform:none}
+.chapters a::before{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.chapters a:hover::before,.chapters a:focus-visible::before{transform:scaleX(1)}
+.chapters .cn{font-family:var(--disp);font-style:italic;font-weight:300;font-size:var(--t-h-1);color:var(--hl)}
+.chapters .ct{font-family:var(--disp);font-weight:var(--dispw);font-size:var(--t-h1);line-height:1.1;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+@media(max-width:900px){.chapters .wrap{grid-template-columns:repeat(3,1fr);padding:0}.chapters a:nth-child(3n){border-right:1px solid var(--line)}.chapters .ct{font-size:var(--t-0)}}
+
+/* ============================================================ SECTION SHELL */
+section.chapter{padding:clamp(72px,12vh,150px) 0}
+.ch-head{display:flex;flex-direction:column;gap:clamp(var(--gap-label),2.4vh,22px);border-top:1px solid var(--line);padding-top:clamp(20px,3vh,30px);margin-bottom:clamp(32px,5vh,64px)}
+.ch-head .ch-row{display:flex;align-items:baseline;justify-content:space-between;gap:24px}
+.ch-head .ch-row h2{order:1}
+.ch-head .ch-row .chapter-no{order:2}
+.ch-head h2{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-3),5.4vw,var(--t-4));line-height:1.04;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+.ch-head h2 em{font-style:italic;color:var(--hl)}
+@media(max-width:720px){.ch-head{gap:12px}.ch-head .ch-row{gap:12px}}
+
+/* ============================================================ ARRIVAL */
+/* mood-contrast italics across display moments */
+.interlude .big em,#garden .g-overlay blockquote em{font-style:italic}
+.house-spread .hs-copy .big-quote em{color:var(--hl)}
+
+/* drop cap — editorial emphasis on the arrival lede */
+#arrival .arr-copy p.lede::first-letter{font-family:var(--disp);font-weight:var(--dispw);font-size:3.1em;line-height:.78;float:left;
+  padding:.06em .12em 0 0;color:var(--hl)}
+
+#arrival .arr-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,64px);align-items:start}
+#arrival .arr-copy p.lede{font-size:clamp(var(--t-h1),1.7vw,var(--t-1));line-height:1.55;max-width:54ch}
+#arrival .arr-copy p+p{margin-top:1.2em;font-size:var(--t-0);color:var(--soft);max-width:54ch}
+#arrival .arr-img{aspect-ratio:4/5}
+#arrival .arr-facts{margin-top:clamp(32px,5vh,56px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr)}
+#arrival .arr-facts div{padding:20px 18px 0 0}
+#arrival .arr-facts b{display:block;font-family:var(--sans);font-weight:400;font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);margin-bottom:var(--gap-label)}
+#arrival .arr-facts span{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-h1),1.6vw,var(--t-1));line-height:1.12;display:block}
+@media(max-width:880px){#arrival .arr-grid{grid-template-columns:1fr}#arrival .arr-facts{grid-template-columns:1fr 1fr;gap:14px 0}}
+
+/* ============================================================ HOUSE */
+#house{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* vertical side label (variety) */
+#house{position:relative}
+.vlabel{position:absolute;top:50%;left:clamp(8px,1.4vw,22px);transform:translateY(-50%);writing-mode:vertical-rl;
+  font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--muted-strong);opacity:.8}
+@media(max-width:1100px){.vlabel{display:none}}
+
+.house-spread{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3.5vw,56px);align-items:end}
+.house-spread .hs-imgs{display:grid;grid-template-columns:1fr .72fr;gap:12px;align-items:end}
+.house-spread .hs-a{aspect-ratio:3/4}
+.house-spread .hs-b{aspect-ratio:3/4;margin-bottom:clamp(24px,5vh,72px)}
+.house-spread .hs-copy .big-quote{font-family:var(--disp);font-weight:var(--dispw);font-style:italic;font-size:clamp(var(--t-1),2.7vw,var(--t-2));line-height:1.24;max-width:24ch}
+.house-spread .hs-copy p{margin-top:1.4em;font-size:var(--t-0);color:var(--soft);max-width:52ch}
+.house-marble{margin-top:clamp(40px,7vh,84px);display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.house-marble .ph{aspect-ratio:4/3}
+@media(max-width:880px){.house-spread{grid-template-columns:1fr}.house-marble{grid-template-columns:1fr}}
+
+/* ============================================================ ROOMS */
+/* rhythm: arrival(bg) · house(panel) · rooms(panel2) · garden gp(tint) · figures(bg) · around(panel) */
+#rooms{background:var(--panel2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#rooms .rooms-lede{max-width:60ch;font-size:clamp(var(--t-0),1.4vw,var(--t-h1));color:var(--soft);margin-bottom:clamp(36px,6vh,72px)}
+.room{margin-bottom:clamp(56px,9vh,110px);border-top:1px solid var(--line);padding-top:clamp(26px,3.4vh,40px)}
+.room:last-of-type{margin-bottom:0}
+/* head sits at the top of the copy column → number/title/eyebrow flush-left with the body,
+   and the gallery (right column) rises to the top beside it — no empty top-right, no number clinging to the divider */
+.room-head{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:clamp(20px,3vh,30px)}
+.room-head .rn{font-family:var(--disp);font-style:italic;font-weight:var(--dispw);font-size:clamp(var(--t-1),2.4vw,var(--t-2));color:var(--accent);opacity:.55;line-height:.9;font-variant-numeric:tabular-nums}
+.room-head h3{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),3.4vw,var(--t-3));letter-spacing:var(--htrack);text-transform:var(--hcase);line-height:var(--lh-display)}
+.room-head .room-sub{margin-top:3px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--muted-strong)}
+.room-body{display:grid;grid-template-columns:minmax(300px,1fr) 1.9fr;gap:clamp(28px,3.5vw,56px);align-items:stretch}
+.room-copy p{font-size:var(--t-0);color:var(--soft);max-width:38ch}
+.room-copy ul{list-style:none;margin-top:20px;border-top:1px solid var(--line)}
+.room-copy li{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:var(--t-h-1)}
+.room-copy li b{font-weight:500}
+.room-copy li span{color:var(--muted-strong);text-align:right}
+.room-ctrl{display:flex;gap:8px;margin-top:24px}
+.room-ctrl button{width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:none;cursor:pointer;color:var(--ink);
+  font-size:var(--t-h-1);display:grid;place-items:center;transition:background .25s,border-color .25s,color .25s}
+.room-ctrl button:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.room-ctrl button{transition:background .25s,border-color .25s,color .25s,transform .2s}
+.room-ctrl button:active{transform:scale(.94)}
+.room-ctrl button[data-next]:hover{transform:translateX(2px)}
+.room-ctrl button[data-prev]:hover{transform:translateX(-2px)}
+
+/* horizontal gallery */
+.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-bottom:6px;cursor:grab;touch-action:pan-x pan-y;height:100%;min-height:clamp(300px,42vh,440px)}
+.strip::-webkit-scrollbar{display:none}
+.strip.dragging{cursor:grabbing;scroll-snap-type:none}
+.strip .slide{flex:0 0 auto;scroll-snap-align:start;position:relative}
+.strip .slide .ph{height:100%}
+.strip .slide.w-land .ph{aspect-ratio:3/2}
+.strip .slide.w-port .ph{aspect-ratio:3/4}
+.strip .slide.w-sq .ph{aspect-ratio:1/1}
+/* gallery hover movement (cinematic) */
+body[data-motion="cinematic"] .strip .slide .ph::before{transition:transform .9s cubic-bezier(.2,.6,.2,1)}
+body[data-motion="cinematic"] .strip .slide:hover .ph::before{transform:scale(1.045)}
+@media (prefers-reduced-motion: reduce){body[data-motion="cinematic"] .strip .slide:hover .ph::before{transform:none}}
+
+.strip .slide figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;justify-content:space-between;gap:10px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:#fff;padding:34px 16px 14px;text-shadow:0 1px 4px rgba(20,24,18,.75);background:linear-gradient(transparent,rgba(20,24,18,.55))}
+@media(max-width:880px){
+  .room-body{grid-template-columns:1fr}
+  .strip .slide .ph{height:min(34vh,260px)}
+}
+
+/* ============================================================ GARDEN */
+/* dark moods: derive the tint from the darker base so courtyard body text keeps ≥4.5 —
+   a light accent2 (e.g. Tavola's cream) won't lift the ground into an unreadable mid-tone */
+body.dark-mood{--tint:color-mix(in srgb, var(--accent2) 16%, var(--bg))}
+#garden{position:relative;color:var(--paper);padding:0}
+#garden .g-img{position:relative;height:130vh;min-height:700px}
+#garden .g-img .ph{position:sticky;top:0;height:100svh}
+/* mood duotone — the big garden hero wears each mood's colour (blends with the sticky image)
+   instead of staying green in every mood */
+#garden .g-img .ph::before{
+  background-image:linear-gradient(color-mix(in srgb, var(--accent) 58%, transparent), color-mix(in srgb, var(--accent) 58%, transparent)), var(--img);
+  background-blend-mode:color}
+/* legibility scrim — radial centre darkening behind the quote + top/bottom for nav & caption */
+#garden .g-img .ph::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(115% 72% at 50% 50%, color-mix(in srgb, var(--deep) 44%, transparent), transparent 72%),
+  linear-gradient(color-mix(in srgb, var(--deep) 48%, transparent),color-mix(in srgb, var(--deep) 16%, transparent) 46%,color-mix(in srgb, var(--deep) 52%, transparent))}
+#garden .g-overlay{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 var(--pad-x)}
+#garden .g-overlay .eyebrow{color:var(--paper);opacity:.85}
+#garden .g-overlay blockquote{font-family:var(--disp);font-weight:var(--dispw);font-style:italic;font-size:clamp(var(--t-2),4vw,var(--t-4));line-height:1.2;max-width:22ch;margin-top:24px;text-shadow:0 2px 24px rgba(20,26,16,.35)}
+#garden .g-overlay .g-cap{margin-top:28px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;opacity:.8}
+#garden .g-pair{background:var(--tint);color:var(--ink);padding:clamp(70px,11vh,130px) 0 clamp(40px,6vh,68px)}
+#garden .g-pair .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(24px,4vw,60px);align-items:center}
+#garden .g-pair .gp-copy p{font-size:var(--t-0);color:var(--soft);max-width:44ch;margin-top:18px}
+#garden .g-pair h3{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),3.2vw,var(--t-3));margin-top:12px;letter-spacing:var(--htrack);text-transform:var(--hcase);line-height:var(--lh-display)}
+#garden .g-pair .gp-img{aspect-ratio:4/3}
+@media(max-width:880px){#garden .g-pair .wrap{grid-template-columns:1fr}}
+
+/* figures band — the house in numbers; shares the courtyard's soft tint (no hard divider between) */
+#garden .figures{background:var(--tint);color:var(--ink);padding:0 0 clamp(64px,10vh,110px)}
+.fig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.fig .fv{display:block;font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-3),4.4vw,var(--t-4));line-height:1;color:var(--hl2);font-variant-numeric:tabular-nums}
+.fig b{display:block;margin-top:var(--gap-label);font-family:var(--sans);font-weight:400;font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);max-width:18ch}
+@media(max-width:880px){.fig-grid{grid-template-columns:1fr 1fr;gap:32px 16px}}
+
+/* ============================================================ THE HOUSE · AT A GLANCE (amenities) */
+.atlas{background:var(--bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(64px,10vh,120px) 0}
+.atlas-head{display:flex;flex-direction:column;gap:var(--gap-label);margin-bottom:clamp(34px,5vh,60px)}
+.atlas-head h3{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),3.6vw,var(--t-3));letter-spacing:var(--htrack);text-transform:var(--hcase);line-height:var(--lh-display)}
+.atlas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(26px,3vw,40px) clamp(20px,3vw,40px)}
+.amen{display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--line);padding-top:16px}
+.amen .ak{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong)}
+.amen .av{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-h1),1.9vw,var(--t-1));line-height:1.12;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+.amen .an{font-family:var(--sans);font-size:var(--t--1);letter-spacing:.03em;color:var(--muted-strong);line-height:1.5}
+/* minimal line icons — hairline stroke, currentColor so every mood recolours them; sits above the label */
+.amen .amen-ic{width:24px;height:24px;display:block;margin-bottom:5px;color:var(--muted-strong);stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:880px){.atlas-grid{grid-template-columns:1fr 1fr;gap:24px 18px}}
+
+/* ============================================================ AROUND + MAP */
+#around{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.around-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(30px,5vw,72px);align-items:center}
+.around-copy .eyebrow{display:block;margin-bottom:var(--gap-label)}
+.around-copy p.lede{font-size:clamp(var(--t-h1),1.7vw,var(--t-1));line-height:1.5;color:var(--ink);max-width:46ch}
+.around-copy p{font-size:var(--t-0);color:var(--soft);max-width:48ch}
+.around-copy p+p{margin-top:1.2em}
+.around-copy .dist{margin-top:clamp(28px,4vh,44px)}
+
+/* ---------- Ibiza location map (mood-driven, stylised) ---------- */
+.ibiza-map{margin:0}
+.ibiza-map svg{width:100%;height:auto;display:block;overflow:visible}
+.ibiza-map .isle{fill:color-mix(in srgb, var(--ink) 18%, var(--bg));stroke:color-mix(in srgb, var(--ink) 32%, var(--bg));stroke-width:.6;stroke-linejoin:round;filter:drop-shadow(0 1.5px 4px color-mix(in srgb, var(--ink) 15%, transparent))}
+.ibiza-map .rd{fill:color-mix(in srgb, var(--ink) 9%, var(--bg))}
+.ibiza-map .dot{fill:color-mix(in srgb, var(--ink) 52%, var(--bg))}
+.ibiza-map .lbl{fill:var(--ink);font-family:var(--sans);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+.ibiza-map .hg0{stop-color:var(--accent);stop-opacity:.40}
+.ibiza-map .hg1{stop-color:var(--accent);stop-opacity:.14}
+.ibiza-map .hg2{stop-color:var(--accent);stop-opacity:0}
+.ibiza-map .hich-glow{fill:url(#hichGlow)}
+.ibiza-map .hich-ring{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.32}
+.ibiza-map .hich-keyline{fill:var(--bg)}
+.ibiza-map .hich-dot{fill:var(--ink)}
+.ibiza-map .hich-lbl{fill:var(--ink);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-anchor:middle}
+.ibiza-map figcaption{margin-top:16px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);text-align:center}
+@media(max-width:880px){.ibiza-map{margin-top:8px}.ibiza-map .lbl{font-size:13px}.ibiza-map .hich-lbl{font-size:14px}}
+.dist{list-style:none;border-top:1px solid var(--line)}
+.dist li{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+.dist li i{font-family:var(--disp);font-style:italic;font-weight:300;font-size:var(--t-h-1);color:var(--muted-strong)}
+.dist li b{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-h1),1.7vw,var(--t-1));line-height:var(--lh-display)}
+.dist li span{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);white-space:nowrap}
+.mapline{margin-top:clamp(56px,9vh,100px);border-top:1px solid var(--line);padding-top:clamp(40px,6vh,64px);text-align:center}
+.mapline .coords{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-3),6vw,var(--t-5));letter-spacing:.02em;line-height:1.05}
+.mapline .coords em{font-style:italic;color:var(--hl)}
+.mapline .coord-sub{margin-top:16px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--muted-strong)}
+.mapline .compass{display:flex;align-items:center;gap:18px;justify-content:center;margin-top:clamp(28px,5vh,48px);font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted)}
+.mapline .compass i{width:clamp(40px,9vw,140px);height:1px;background:var(--line)}
+@media(max-width:880px){.around-grid{grid-template-columns:1fr}}
+
+/* ============================================================ BOOKING */
+#book{padding-bottom:0}
+#book .book-card{background:var(--ink);color:var(--bg);padding:clamp(60px,9vh,110px) var(--pad-x);text-align:center;
+  border-top:1px solid var(--line)}
+#book h2.book-line em{font-style:italic;color:color-mix(in srgb, var(--accent2) 60%, var(--bg))}
+#book .book-card .eyebrow{color:color-mix(in srgb, var(--bg) 80%, var(--ink))}
+#book h2.book-line{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),4.6vw,var(--t-4));line-height:1.12;margin:24px auto 0;max-width:18ch;letter-spacing:var(--htrack);text-transform:var(--hcase)}
+#book h2.book-line em{font-style:italic}
+#book .book-mail{display:inline-block;margin-top:36px;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:inherit;
+  text-decoration:none;border:1px solid color-mix(in srgb, var(--bg) 40%, transparent);border-radius:32px;padding:16px 30px;transition:background .25s,border-color .25s;max-width:100%;overflow-wrap:anywhere}
+#book .book-mail:hover{background:var(--bg);border-color:var(--bg);color:var(--ink)}
+#book .book-meta{margin-top:32px;display:flex;gap:14px 30px;justify-content:center;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:color-mix(in srgb, var(--bg) 78%, var(--ink));flex-wrap:wrap}
+
+#book .book-dl{margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:18px}
+#book .book-dl .eyebrow{color:color-mix(in srgb, var(--bg) 70%, var(--ink))}
+#book .book-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+#book .book-pdf,#book .book-share{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:inherit;text-decoration:none;cursor:pointer;background:none;
+  border:1px solid color-mix(in srgb, var(--bg) 40%, transparent);border-radius:28px;padding:14px 24px;transition:background .25s,border-color .25s,color .25s}
+#book .book-pdf:hover,#book .book-share:hover{background:var(--bg);border-color:var(--bg);color:var(--ink)}
+#book .book-dl-note{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:color-mix(in srgb, var(--bg) 78%, var(--ink))}
+
+/* ---------- first-visit tour ---------- */
+.tour-backdrop{position:fixed;inset:0;z-index:9400;background:color-mix(in srgb, var(--deep) 52%, transparent);backdrop-filter:blur(2px)}
+.tour-card{position:fixed;z-index:9450;width:min(340px,calc(100vw - 32px));background:var(--panel2);color:var(--ink);
+  border:1px solid var(--line);box-shadow:0 24px 60px rgba(20,24,16,.35);padding:24px 24px 20px}
+.tour-card.anchored::before{content:"";position:absolute;top:-7px;right:34px;width:12px;height:12px;background:var(--panel2);
+  border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+.tour-eyebrow{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--hl)}
+.tour-title{font-family:var(--disp);font-weight:var(--dispw);font-size:var(--t-1);line-height:var(--lh-display);margin-top:10px;letter-spacing:var(--htrack)}
+.tour-body{font-size:var(--t-h-1);line-height:1.55;color:var(--soft);margin-top:10px}
+.tour-actions{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+.tour-skip{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);padding:10px 6px}
+.tour-skip:hover{color:var(--ink)}
+.tour-next{background:var(--ink);border:1px solid var(--ink);color:var(--bg);cursor:pointer;border-radius:24px;
+  font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;padding:11px 22px;transition:background .2s}
+.tour-next:hover{background:color-mix(in srgb, var(--ink) 82%, var(--bg))}
+.tour-glow{outline:2px solid var(--accent) !important;outline-offset:4px;border-radius:24px}
+
+
+footer{background:var(--ink);color:color-mix(in srgb, var(--bg) 80%, var(--ink));border-top:1px solid color-mix(in srgb, var(--bg) 14%, transparent)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:24px;padding-bottom:28px;flex-wrap:wrap}
+footer .f-logo{height:22px;width:46px;color:var(--bg)}
+footer span{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase}
+
+/* ============================================================ MOOD INDEX OVERLAY */
+.moods-overlay{position:fixed;inset:0;z-index:9500;background:var(--bg);color:var(--ink);overflow-y:auto;
+  padding:clamp(20px,4vw,56px) clamp(18px,5vw,72px) clamp(48px,7vh,80px);
+  opacity:0;pointer-events:none;transition:opacity .35s ease}
+.moods-overlay.open{opacity:1;pointer-events:auto}
+.mo-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.mo-eyebrow{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-eyebrow);text-transform:uppercase;color:var(--muted-strong)}
+.mo-close{background:none;border:1px solid var(--line);border-radius:24px;cursor:pointer;color:inherit;font-family:var(--sans);
+  font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;padding:10px 18px;transition:background .25s,border-color .25s,color .25s}
+.mo-close:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.mo-title{font-family:var(--disp);font-weight:var(--dispw);font-size:clamp(var(--t-2),5vw,var(--t-4));line-height:1.02;margin-top:clamp(28px,5vh,52px);letter-spacing:var(--htrack)}
+.mo-title em{font-style:italic;color:var(--accent)}
+.moods-list{margin-top:clamp(24px,4vh,40px);border-top:1px solid var(--line)}
+.moods-list button{display:grid;grid-template-columns:48px 1fr auto auto;align-items:center;gap:18px;width:100%;
+  padding:15px 6px;border:none;border-bottom:1px solid var(--line);background:none;color:inherit;cursor:pointer;text-align:left;
+  transition:background .2s,padding-left .2s}
+.moods-list button:hover{background:var(--panel);padding-left:16px}
+.moods-list button.current{background:var(--panel)}
+.moods-list button.current .ml-no{color:var(--accent)}
+.ml-no{font-family:var(--sans);font-size:var(--t--1);letter-spacing:var(--track-caps);color:var(--muted-strong);font-variant-numeric:tabular-nums}
+.ml-name{font-weight:400;font-size:clamp(var(--t-h1),2.6vw,var(--t-2));line-height:1.12}
+.ml-ref{font-family:var(--sans);font-style:normal;font-size:var(--t--1);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--muted-strong);text-align:right}
+.ml-bands{display:flex;width:110px;height:14px;overflow:hidden;border-radius:2px}
+.ml-bands span{flex:1}
+
+/* ============================================================ MOOD OVERRIDES */
+/* 07 Bottega — Cinzel is an all-caps Roman with no true italic; emphasis must read through
+   colour (the olive accent) + caps, not a synthetic slant. Neutralise every disp-italic spot. */
+body[data-mood="07"] em,
+body[data-mood="07"] .big-quote,
+body[data-mood="07"] .chapter-no,
+body[data-mood="07"] .chapters .cn,
+body[data-mood="07"] .room-head .rn,
+body[data-mood="07"] .dist li i,
+body[data-mood="07"] .mo-title em{font-style:normal !important}
+/* warm ochre numerals as a complement to the green tint band — Bottega's two palette colours meeting
+   (anchored toward ink so they clear 3:1 on the olive tint) */
+body[data-mood="07"] .fig .fv{color:color-mix(in srgb, #B27636 60%, var(--ink))}
+/* warm taupe display headings — the CASA OASIS look on the light greige ground */
+body[data-mood="07"] .ch-head h2,
+body[data-mood="07"] .room-head h3,
+body[data-mood="07"] #garden .g-pair h3,
+body[data-mood="07"] .atlas-head h3,
+body[data-mood="07"] .amen .av,
+body[data-mood="07"] .mapline .coords,
+body[data-mood="07"] .mo-title{color:#80705d}
+/* emphasis: SAME cut/weight as the heading — only a contrasting HUE. Warm ochre against the
+   cool taupe heading reads clearly as a different colour without going bold or dark. */
+body[data-mood="07"] .ch-head h2 em,
+body[data-mood="07"] .mapline .coords em,
+body[data-mood="07"] .mo-title em{color:#B27636}
+/* tame Cinzel's .1em tracking where it crowds adjacent annotations (keep the wide tracking on big display heads) */
+body[data-mood="07"] .amen .av{letter-spacing:.04em}
+body[data-mood="07"] .room-head h3{letter-spacing:.05em}
+
+/* ============================================================ END-CUSTOMER (public) VIEW
+   shared via 'Share website': one locked mood, no wizard / no mood index / no brochure showcase —
+   the email pill (.book-mail) is the single contact action. */
+body.public .nav-moods,
+body.public #book .book-dl{display:none}
+
+/* ============================================================ MOBILE */
+@media(max-width:720px){
+  nav.bar{height:56px;gap:10px}
+  nav.bar .nav-sub{display:none}
+  nav.bar .nav-logo{height:24px;width:50px}
+  .nav-moods{padding:11px 14px;margin-left:auto;min-height:44px;display:inline-flex;align-items:center}
+  nav.bar .nav-cta{padding:8px 12px}
+  .hero .hero-frame{padding:76px 18px 22px}
+  .hero .h-top{letter-spacing:.24em}
+  .hero .h-bot{letter-spacing:.2em}
+  .chapters a{padding:16px 12px}
+  .moods-list button{grid-template-columns:34px 1fr auto;gap:12px}
+  .ml-ref{display:none}
+  .ml-bands{width:76px;height:12px}
+  footer .wrap{justify-content:center;text-align:center}
+}
+
+/* ---------- mobile typographic cleanup: clearer section rhythm, calmer headings ---------- */
+@media(max-width:720px){
+  /* each chapter gets air + a single hairline so the sections read as distinct beats */
+  section.chapter{padding:clamp(52px,9vh,84px) 0}
+  .ch-head,.atlas-head{border-top:1px solid var(--line);padding-top:clamp(26px,5vh,40px);margin-bottom:clamp(24px,4.5vh,40px)}
+  /* chapter numeral: stack it left-aligned above the title (was cramped against the right edge) */
+  .ch-head .ch-row{display:block}
+  .ch-head .ch-row h2{display:block}
+  .ch-head .ch-row .chapter-no{order:0;display:inline-block;float:none;margin:0 0 6px;
+    font-size:var(--t-1);line-height:1;opacity:.45}
+  /* drop the oversized drop-cap — it wraps the first lines raggedly in a narrow column */
+  #arrival .arr-copy p.lede::first-letter{float:none;font-family:inherit;font-weight:inherit;
+    font-size:inherit;line-height:inherit;color:inherit;margin:0;padding:0}
+  /* one eyebrow per section: the chapter eyebrow already labels #around */
+  #around .around-copy .eyebrow.acc{display:none}
+}
+
+/* ---------- photo lightbox (GLightbox): full-bleed, aspect kept, warm backdrop ---------- */
+.goverlay{background:rgba(24,22,18,.95)}
+.glightbox-clean .gslide-image img{box-shadow:none;border-radius:0;max-height:96vh;max-width:96vw}
+.glightbox-clean .gslide-media{box-shadow:none}
+/* caption overlaid on the image so the photo stays full-size (no distortion, no shrinking) */
+.glightbox-clean .gslide-description{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(18,16,12,.62));padding:34px 16px 16px;text-align:center}
+.glightbox-clean .gslide-title{font-family:var(--sans);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#ece6da;margin:0}
+.glightbox-clean .gslide-desc{color:#c4bdb0}
+.gclose,.gprev,.gnext{opacity:.82;transition:opacity .2s}
+.gclose:hover,.gprev:hover,.gnext:hover{opacity:1}
+
+/* ---------- mobile room galleries: full-bleed swipe carousel (no arrows) ---------- */
+@media(max-width:720px){
+  /* on a phone you swipe — the arrows are desktop-only */
+  .room-ctrl{display:none}
+  /* break the strip out to the full viewport width, one image per view, clean swipe-snap */
+  .strip{margin-inline:calc(50% - 50vw);gap:0;padding:0;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .strip .slide{flex:0 0 100vw;scroll-snap-align:center}
+  .strip .slide .ph{width:100vw;height:68vh}            /* fills the viewport; cover keeps it undistorted */
+  /* label sits in the image, full-bleed, on a readable gradient overlay */
+  .strip .slide figcaption{padding:56px 22px 20px;background:linear-gradient(transparent,rgba(18,21,15,.68))}
+}
